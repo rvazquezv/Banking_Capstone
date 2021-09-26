@@ -15,14 +15,13 @@
 ###############################################################################
 
 
-
-
-
-################################################################################################################
-# Download source data set, and split it between training, test and validation sets (final hold-out test set)
-################################################################################################################
-
-# Note: this process could take a couple of minutes
+###############################################################################
+###############################################################################
+##
+## Libraries needed for the project
+##
+###############################################################################
+###############################################################################
 
 if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
 if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.org")
@@ -35,6 +34,31 @@ library(caret)
 library(data.table)
 library(rvest)
 library(httr)
+
+
+###############################################################################
+###############################################################################
+##        Functions specifically created for the project
+###############################################################################
+###############################################################################
+
+## substrRight function to substract n last characters on a string
+substrRight <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+
+## substrLeft function to substract n first characters on a string
+substrLeft <- function(x, n){
+  substr(x, 1, n)
+}
+
+################################################################################################################
+# Download source data set, and split it between training, test and validation sets (final hold-out test set)
+################################################################################################################
+
+# Note: this process could take a couple of minutes
+
 
 # URL with original dataset to be downloaded
 url<-"https://archive.ics.uci.edu/ml/datasets/Bank+Marketing#"
@@ -56,3 +80,13 @@ dl <- tempfile()
 download.file(dfile,dl)
 untar(dl,exdir=inputdir)
 rm(dl)
+
+dirs<-list.dirs()
+idx_dirs<-grep("/Input",dirs)
+dirs[idx_dirs]
+
+dir <- system.file("extdata", package = "dslabs") 
+fullpath <- file.path(dir, filename)
+
+
+dir <- system.file(paste(substrLeft(file,15),".csv",sep=""),mustWork=TRUE)
