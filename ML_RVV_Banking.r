@@ -53,6 +53,8 @@ substrLeft <- function(x, n){
   substr(x, 1, n)
 }
 
+
+
 ################################################################################################################
 # Download source data set, and split it between training, test and validation sets (final hold-out test set)
 ################################################################################################################
@@ -67,7 +69,7 @@ url2<-"https://archive.ics.uci.edu/ml/machine-learning-databases/00222/"
   
 file<-"bank-additional.zip"
 
-dfile<-paste(url2,"bank-additional.zip",sep="")
+dfile<-paste(url2,file,sep="")
 
 
 # Create input folder on working directory to download source files
@@ -81,12 +83,22 @@ download.file(dfile,dl)
 untar(dl,exdir=inputdir)
 rm(dl)
 
+
+#Looking for downloading directory
 dirs<-list.dirs()
-idx_dirs<-grep("/Input",dirs)
-dirs[idx_dirs]
+idx_dirs<-grep(paste("/Input",substrLeft(file,15),sep="/"),dirs)
+dw_dir<-dirs[idx_dirs]
 
-dir <- system.file("extdata", package = "dslabs") 
-fullpath <- file.path(dir, filename)
+#List files tp download
+dw_files<-list.files(path=dw_dir)
+
+#Download n all files and save them into Input_file_n  tibbles
+for(i in (1:length(dw_files))){
+aux <- expression(paste("Input_file",as.character(i),sep="_"))                                  # Create name of the tibble expression
+aux2<- expression(read_delim(file=paste(dw_dir,dw_files[i],sep="/"),delim=";",col_names=TRUE))  # Create read_delim expression
+z<-paste(eval(aux),aux2,sep="<-")                                                               # Create assignation expression as a string
+eval(parse(text=z))                                                                             # Evaluate expression
+}
 
 
-dir <- system.file(paste(substrLeft(file,15),".csv",sep=""),mustWork=TRUE)
+#rm(Input_file_1,Input_file_2,Input_file_3)
