@@ -116,8 +116,9 @@ eval(parse(text=z))                                                             
 
 
 
+idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
 
-
+colnames(Input_file_1[idx_isc])
 
 #Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
 # Thus if previous antijoin is 0 means one set is contained in the other one

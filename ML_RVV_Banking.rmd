@@ -24,9 +24,11 @@ knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
 
 According to wikipedia:
 
-Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
 
-And direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
+    1. Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
+    2. Direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
+
+
 
 Hence we can understand that direct marketing campaigns are several processes producers undertake to engage directly its target consumers, build strong relationships to create value in order to capture value in return and get a fast and direct response.
 
@@ -34,7 +36,7 @@ As time goes by and technology advances those processes evolved, and keep on evo
 
 One not so long old-fashioned direct marketing technique was phone calls.
 
-The purpose of this project is analyzing if such technique risen by a Portuguese banking institution not so much time ago, had positive effect or not in its clients, or in other words building a classification system to predict if the client would subscribe a term deposit.
+The purpose of this project is analyzing if such technique applied in this case by a Portuguese banking institution not so much time ago, had positive effect or not in its clients, or in other words building a classification system to predict if the client would subscribe a term deposit.
 
 The origin dataset has been downloaded from The UCI Machine Learning Repository: 
 https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
@@ -88,10 +90,80 @@ substrLeft <- function(x, n){
 
 # 2 Methodology
 
-Next step consist on analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of recommendation systems.
+Next step consist on analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of classification problems.
 
 
 ## 2.1 Exploratory Analysis
+
+
+```{r Downloading-data, message=FALSE}
+
+################################################################################################################
+# Download source data set, and split it between training, test and validation sets (final hold-out test set)
+################################################################################################################
+
+# Note: this process could take a couple of minutes
+
+
+# URL with original dataset to be downloaded
+url<-"https://archive.ics.uci.edu/ml/datasets/Bank+Marketing#"
+url2<-"https://archive.ics.uci.edu/ml/machine-learning-databases/00222/"
+  
+  
+file<-"bank-additional.zip"
+
+dfile<-paste(url2,file,sep="")
+
+
+# Create input folder on working directory to download source files
+mydir<-getwd()
+inputdir<-paste(mydir,"/Input",sep="")
+dir.create(path=inputdir,mode="0777")
+
+# Download source files, unzip them and erase temp files
+dl <- tempfile()
+download.file(dfile,dl)
+untar(dl,exdir=inputdir)
+rm(dl)
+
+
+#Looking for downloading directory
+dirs<-list.dirs()
+idx_dirs<-grep(paste("/Input",substrLeft(file,15),sep="/"),dirs)
+dw_dir<-dirs[idx_dirs]
+
+#List files tp download
+dw_files<-list.files(path=dw_dir)
+
+#Download n all files and save them into Input_file_n  tibbles
+for(i in (1:length(dw_files))){
+exp1 <- expression(paste("Input_file",as.character(i),sep="_"))                                  # Create name of the tibble expression
+exp2<- expression(read_delim(file=paste(dw_dir,dw_files[i],sep="/"),delim=";",col_names=TRUE))   # Create read_delim expression
+z<-paste(eval(exp1),exp2,sep="<-")                                                               # Create assignation expression as a string
+eval(parse(text=z))                                                                              # Evaluate expression
+}
+
+```
+
+Let's start by exploring and summarizing the source dataset:
+
+
+```{r Exploratory Analysis, message=FALSE}
+head(Input_file_1)
+summary(Input_file_1)
+
+
+#Build an index with all character columns in the dataset that will need to become factor
+idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
+
+```
+
+At simple glance, it can be observed that the dataset is a data.frame containing `r format(nrow(Input_file_1),big.mark=",",scientific=F)` rows and `r format(ncol(Input_file_1),big.mark=",",scientific=F)` columns, the last one with the prediction values. It is also evident the split between numerical data and categorical data. In order to be able to address this first issue it is necessary to transform characters into factors for columns: `r format(colnames(Input_file_1[idx_isc]),big.mark=",",scientific=F)` 
+
+
+Let's explore possible values for these columns 
+
+DESCRIBE VARIABLES HERE
 
 
 ## 2.2.Transforming and partitioning original dataset
