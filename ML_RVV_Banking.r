@@ -94,11 +94,21 @@ dw_files<-list.files(path=dw_dir)
 
 #Download n all files and save them into Input_file_n  tibbles
 for(i in (1:length(dw_files))){
-aux <- expression(paste("Input_file",as.character(i),sep="_"))                                  # Create name of the tibble expression
-aux2<- expression(read_delim(file=paste(dw_dir,dw_files[i],sep="/"),delim=";",col_names=TRUE))  # Create read_delim expression
-z<-paste(eval(aux),aux2,sep="<-")                                                               # Create assignation expression as a string
+exp1 <- expression(paste("Input_file",as.character(i),sep="_"))                                  # Create name of the tibble expression
+exp2<- expression(read_delim(file=paste(dw_dir,dw_files[i],sep="/"),delim=";",col_names=TRUE))  # Create read_delim expression
+z<-paste(eval(exp1),exp2,sep="<-")                                                               # Create assignation expression as a string
 eval(parse(text=z))                                                                             # Evaluate expression
 }
 
 
 #rm(Input_file_1,Input_file_2,Input_file_3)
+
+#Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
+# Thus if previous antijoin is 0 means one set is contained in the other one
+nrow(anti_join(Input_file_3,Input_file_1,by=NULL))
+
+
+
+head(Input_file_2)
+summary(Input_file_2)
+
