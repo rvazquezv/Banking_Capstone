@@ -1,0 +1,118 @@
+---
+title: "ML algorithm for Harvardx Capstone Course, Choose Your Own project"
+author: "Rubén Vázquez del Valle"
+date: "2/10/2021"
+output:
+  html_document:
+    df_print: kable
+    fig_caption: true
+    toc: true
+    latex_engine: xelatex
+
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
+```
+
+
+
+# 1.Introduction
+
+
+According to wikipedia:
+
+Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
+
+And direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
+
+Hence we can understand that direct marketing campaigns are several processes producers undertake to engage directly its target consumers, build strong relationships to create value in order to capture value in return and get a fast and direct response.
+
+As time goes by and technology advances those processes evolved, and keep on evolving, from different analog channels such as reply cards, reply forms to be sent in an envelope, to new and more sophisticated digital ones such as  websites, text messages sent to cellular phone and/or email addresses.
+
+One not so long old-fashioned direct marketing technique was phone calls.
+
+The purpose of this project is analyzing if such technique risen by a Portuguese banking institution not so much time ago, had positive effect or not in its clients, or in other words building a classification system to predict if the client would subscribe a term deposit.
+
+The origin dataset has been downloaded from The UCI Machine Learning Repository: 
+https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
+
+
+Once dataset was created, I have based my work on *"HarvardX - PH125.8x course: Data Science - Machine Learning"* specifically on machine learning techniques applied to supervised learning.
+
+
+
+```{r loading-libs, message=FALSE}
+
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.org")
+if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
+if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
+if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
+if(!require(genefilter)) install.packages("genefilter", repos = "http://cran.us.r-project.org")
+
+library(tidyverse)
+library(caret)
+library(data.table)
+library(rvest)
+library(httr)
+library(genefilter)
+
+```
+
+
+```{r loading-functions, message=FALSE}
+###############################################################################
+###############################################################################
+##        Functions specifically created for the project
+###############################################################################
+###############################################################################
+
+## substrRight function to substract n last characters on a string
+substrRight <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+
+## substrLeft function to substract n first characters on a string
+substrLeft <- function(x, n){
+  substr(x, 1, n)
+}
+
+
+```
+
+\newpage  
+
+# 2 Methodology
+
+Next step consist on analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of recommendation systems.
+
+
+## 2.1 Exploratory Analysis
+
+
+## 2.2.Transforming and partitioning original dataset
+
+
+## 2.3 Modelling
+
+
+### 2.3.1 BASELINE PREDICTORS
+
+
+\newpage
+
+# 3.Results
+
+
+\newpage
+
+# 4.Conclusions
+
+
+\newpage
+
+# 5.Bibliography
