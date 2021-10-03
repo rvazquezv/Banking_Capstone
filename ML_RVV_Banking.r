@@ -201,28 +201,6 @@ test_set <- bankraw[test_index,]
 
 str(train_set)
 
-#Build an index with all character columns in the dataset that will need to become factor
-idx_isc<-which(sapply(train_set,is.character)==TRUE)
-
-# Get the columns to be converted to factor and split from the others that do not need to change
-df1<-train_set[,idx_isn]
-df2<-train_set[,-idx_isn]
-
-l<-sapply(df1,factor)
-
-
-which(idx_isn==TRUE)
-
-for(i in (1:ncol(x))){
-  train_set[,i]<-ifelse(idx_isn[[i]],train_set[,i],factor(train_set[,i]))
-}  
-
-
-str(a)
-
-summary(train_set)
-summary(y)
-
 
 
 ###############################################################################
