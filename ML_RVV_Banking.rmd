@@ -149,7 +149,9 @@ Let's start by exploring and summarizing the source dataset:
 
 
 ```{r Exploratory Analysis, message=FALSE}
-head(Input_file_1)
+
+head(Input_file_1[1:10])
+head(Input_file_1[11:21])
 summary(Input_file_1)
 
 

@@ -120,13 +120,31 @@ idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
 
 colnames(Input_file_1[idx_isc])
 
+levels(factor(Input_file_1$job))
+
+
+
+
+exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Create "names of each column in tibble" expression
+eval(parse(text=eval(exp1)))                                                               # Evaluate expression
+
+
+
+                                                                            
+
+for(i in (1:length(idx_isc))){
+  paste(Input_file_1,(colnames(Input_file_1[idx_isc])[i]),sep="$")
+}  
+
+
 #Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
 # Thus if previous antijoin is 0 means one set is contained in the other one
 nrow(anti_join(Input_file_3,Input_file_1,by=NULL))
 
 
 
-head(Input_file_1)
+head(Input_file_1[1:10])
+head(Input_file_1[11:21])
 summary(Input_file_1)
 
 
