@@ -167,6 +167,19 @@ Let's explore possible values for these columns
 
 DESCRIBE VARIABLES HERE
 
+```{r Exploratory Analysis 2, message=FALSE}
+for(i in (1:length(idx_isc))){
+#The idea is building for each character column the sentence that will cast it to a factor column. For instance:
+# Input_file_1$job<-factor(Input_file_1$job)
+# Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression
+exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Get "names of each column in tibble" expression
+exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # Apply factor function to previous one expression
+exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # Get level for a factor column expression
+cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
+}  
+
+
+```
 
 ## 2.2.Transforming and partitioning original dataset
 

@@ -114,26 +114,24 @@ eval(parse(text=z))                                                             
 ###############################################################################
 ###############################################################################
 
+head(Input_file_1)
+summary(Input_file_1)
 
 
+#Splitting columns between numerical and categorical
 idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
 
 colnames(Input_file_1[idx_isc])
 
-levels(factor(Input_file_1$job))
-
-
-
-
-exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Create "names of each column in tibble" expression
-eval(parse(text=eval(exp1)))                                                               # Evaluate expression
-
-
-
-                                                                            
-
+# Get values for character columns
 for(i in (1:length(idx_isc))){
-  paste(Input_file_1,(colnames(Input_file_1[idx_isc])[i]),sep="$")
+  #The idea is building for each character column the sentence that will cast it to a factor column. For instance:
+  # Input_file_1$job<-factor(Input_file_1$job)
+  # Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression.
+  exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Input_file_1$**** expression
+  exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # factor(Input_file_1$****) expression
+  exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # levels(factor(Input_file_1$****)) expression
+  cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
 }  
 
 
@@ -142,10 +140,6 @@ for(i in (1:length(idx_isc))){
 nrow(anti_join(Input_file_3,Input_file_1,by=NULL))
 
 
-
-head(Input_file_1[1:10])
-head(Input_file_1[11:21])
-summary(Input_file_1)
 
 
 head(Input_file_2)
