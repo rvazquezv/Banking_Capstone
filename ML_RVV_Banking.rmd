@@ -165,21 +165,26 @@ At simple glance, it can be observed that the dataset is a data.frame containing
 
 Let's explore possible values for these columns 
 
-DESCRIBE VARIABLES HERE
 
 ```{r Exploratory Analysis 2, message=FALSE}
+# Get values for character columns
 for(i in (1:length(idx_isc))){
-#The idea is building for each character column the sentence that will cast it to a factor column. For instance:
-# Input_file_1$job<-factor(Input_file_1$job)
-# Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression
-exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Get "names of each column in tibble" expression
-exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # Apply factor function to previous one expression
-exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # Get level for a factor column expression
-cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
+  #The idea is building for each character column the sentence that will cast it to a factor column. For instance:
+  # Input_file_1$job<-factor(Input_file_1$job)
+  # Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression.
+  exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Input_file_1$**** expression
+  exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # factor(Input_file_1$****) expression
+  exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # levels(factor(Input_file_1$****)) expression
+  cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
+  z<-paste(eval(exp1),exp2,sep="<-")                                                         # Create a<-factor(a) expression 
+  eval(parse(text=z))    
 }  
 
-
 ```
+
+
+DESCRIBE ALL VARIABLES HERE
+
 
 ## 2.2.Transforming and partitioning original dataset
 

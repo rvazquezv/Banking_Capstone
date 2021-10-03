@@ -132,7 +132,12 @@ for(i in (1:length(idx_isc))){
   exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # factor(Input_file_1$****) expression
   exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # levels(factor(Input_file_1$****)) expression
   cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
+  z<-paste(eval(exp1),exp2,sep="<-")                                                         # Create a<-factor(a) expression 
+  eval(parse(text=z))    
 }  
+
+
+                                                                        
 
 
 #Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
