@@ -186,6 +186,14 @@ for(i in (1:length(idx_isc))){
 DESCRIBE ALL VARIABLES HERE
 
 
+Let's look again how data is distributed
+```{r Exploratory Analysis 3, message=FALSE}
+summary(Input_file_1)
+
+
+```
+
+
 ## 2.2.Transforming and partitioning original dataset
 
 
