@@ -145,7 +145,17 @@ eval(parse(text=z))                                                             
 
 ```
 
-Let's start by exploring and summarizing the source dataset:
+After downloading source data it is observable that there are three files compressed: `r format(dw_files,big.mark=",")`.
+
+
+`r format(dw_files[2],big.mark=",")` is a text document with some basic information about the remaining ones. Here it is stated that `r format(dw_files[3],big.mark=",")` is a random sample subset of `r format(dw_files[1],big.mark=",")` 
+
+Applying basic relational algebra, a simple way to confirm that a set B is a subset of another one A, is getting the size of the anti_join function. While anti_join() return all rows from B without a match in A, having and antijoin by all columns with size 0  means that all rows in B are present in A, which indeed confirms that B is a subset of A.
+
+Hence applying anti_join to  `r format(dw_files[3],big.mark=",")` on `r format(dw_files[1],big.mark=",")` by all columns, the number of rows obtained is: `r format(nrow(anti_join(Input_file_3,Input_file_1,by=NULL)),big.mark=",",scientific=F)` which confirms that data file to be used is `r format(dw_files[1],big.mark=",")`
+
+
+Now that source data has been properly addressed, let's continue by exploring and summarizing the dataset `r format(dw_files[1],big.mark=",")`:
 
 
 ```{r Exploratory Analysis, message=FALSE}
@@ -162,8 +172,7 @@ idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
 
 At simple glance, it can be observed that the dataset is a data.frame containing `r format(nrow(Input_file_1),big.mark=",",scientific=F)` rows and `r format(ncol(Input_file_1),big.mark=",",scientific=F)` columns, the last one with the prediction values. It is also evident the split between numerical data and categorical data. In order to be able to address this first issue it is necessary to transform characters into factors for columns: `r format(colnames(Input_file_1[idx_isc]),big.mark=",",scientific=F)` 
 
-
-Let's explore possible values for these columns 
+Let's explore possible values for the categorical columns 
 
 
 ```{r Exploratory Analysis 2, message=FALSE}
@@ -183,15 +192,47 @@ for(i in (1:length(idx_isc))){
 ```
 
 
-DESCRIBE ALL VARIABLES HERE
 
-
-Let's look again how data is distributed
+Once categorical values have been transformed from character to factor, let's look again how the values of those columns are distributed
 ```{r Exploratory Analysis 3, message=FALSE}
-summary(Input_file_1)
+summary(Input_file_1[idx_isc])
 
 
 ```
+
+
+At this point, it is fair to assume then that description of columns of our dataset provided in file `r format(dw_files[2],big.mark=",")` is correct, stating the following:
+
+
+   Input variables:
+   # bank client data:
+   1 - age (numeric)
+   2 - job : type of job (categorical: "admin.","blue-collar","entrepreneur","housemaid","management","retired","self-employed","services","student","technician","unemployed","unknown")
+   3 - marital : marital status (categorical: "divorced","married","single","unknown"; note: "divorced" means divorced or widowed)
+   4 - education (categorical: "basic.4y","basic.6y","basic.9y","high.school","illiterate","professional.course","university.degree","unknown")
+   5 - default: has credit in default? (categorical: "no","yes","unknown")
+   6 - housing: has housing loan? (categorical: "no","yes","unknown")
+   7 - loan: has personal loan? (categorical: "no","yes","unknown")
+   # related with the last contact of the current campaign:
+   8 - contact: contact communication type (categorical: "cellular","telephone") 
+   9 - month: last contact month of year (categorical: "jan", "feb", "mar", ..., "nov", "dec")
+  10 - day_of_week: last contact day of the week (categorical: "mon","tue","wed","thu","fri")
+  11 - duration: last contact duration, in seconds (numeric). Important note:  this attribute highly affects the output target (e.g., if duration=0 then y="no"). Yet, the duration is not known before a call is performed. Also, after the end of the call y is obviously known. Thus, this input should only be included for benchmark purposes and should be discarded if the intention is to have a realistic predictive model.
+   # other attributes:
+  12 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact)
+  13 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric; 999 means client was not previously contacted)
+  14 - previous: number of contacts performed before this campaign and for this client (numeric)
+  15 - poutcome: outcome of the previous marketing campaign (categorical: "failure","nonexistent","success")
+   # social and economic context attributes
+  16 - emp.var.rate: employment variation rate - quarterly indicator (numeric)
+  17 - cons.price.idx: consumer price index - monthly indicator (numeric)     
+  18 - cons.conf.idx: consumer confidence index - monthly indicator (numeric)     
+  19 - euribor3m: euribor 3 month rate - daily indicator (numeric)
+  20 - nr.employed: number of employees - quarterly indicator (numeric)
+
+  Output variable (desired target):
+  21 - y - has the client subscribed a term deposit? (binary: "yes","no")
+
 
 
 ## 2.2.Transforming and partitioning original dataset

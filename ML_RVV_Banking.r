@@ -114,6 +114,14 @@ eval(parse(text=z))                                                             
 ###############################################################################
 ###############################################################################
 
+
+#Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
+# Thus if previous antijoin is 0 means one set is contained in the other one
+nrow(anti_join(Input_file_3,Input_file_1,by=NULL))
+
+
+
+
 head(Input_file_1)
 summary(Input_file_1)
 
@@ -135,20 +143,6 @@ for(i in (1:length(idx_isc))){
   z<-paste(eval(exp1),exp2,sep="<-")                                                         # Create a<-factor(a) expression 
   eval(parse(text=z))    
 }  
-
-
-                                                                        
-
-
-#Confirming Input_file_3 is a subset of Input_file_1 while anti_join() return all rows from x without a match in y.
-# Thus if previous antijoin is 0 means one set is contained in the other one
-nrow(anti_join(Input_file_3,Input_file_1,by=NULL))
-
-
-
-
-head(Input_file_2)
-summary(Input_file_2)
 
 
 
@@ -227,4 +221,7 @@ train_set$job<-factor(train_set$job)
 
 
 
-fit <- lm(y ~ ., data = train_set)
+fit <- lm(y ~ age+job, data = train_set)
+
+
+fit <- glm(y ~ age+job, data = train_set)
