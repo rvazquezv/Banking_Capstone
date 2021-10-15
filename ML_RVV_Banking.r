@@ -29,6 +29,7 @@ if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
 if(!require(genefilter)) install.packages("genefilter", repos = "http://cran.us.r-project.org")
+if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 
 library(tidyverse)
 library(caret)
@@ -36,6 +37,7 @@ library(data.table)
 library(rvest)
 library(httr)
 library(genefilter)
+library(e1071)
 
 ###############################################################################
 ###############################################################################
@@ -205,23 +207,6 @@ str(train_set)
 
 
 
-tt<-colttests(train_set[,1:20],train_set[,21])
-
-x<-as.matrix(train_set[,1:20])
-y<-factor(train_set$y)
-
-tt <- colttests(x, y)
-
-tt$p.value
-
-ind <- which(tt$pvalue <= 0.01)
-
-
-train_set$job<-factor(train_set$job)
-
-
-
-fit <- lm(y ~ age+job, data = train_set)
 
 ##        II.) LOGISTIC REGRESSION
 
