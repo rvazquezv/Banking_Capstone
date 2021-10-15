@@ -203,6 +203,21 @@ test_set <- bankraw[test_index,]
 str(train_set)
 
 
+train_set%>%ggplot(aes(y,age)) +
+  geom_point() +
+  ylab("Age") +
+  ggtitle("Bivariate Analysis on Age") +
+  labs(caption = "Figure 1")
+
+
+
+train_set%>%ggplot(aes(y,job)) +
+  geom_point() +
+  ylab("Job") +
+  ggtitle("Bivariate Analysis on Job") +
+  labs(caption = "Figure 2")
+
+
 
 ###############################################################################
 ##

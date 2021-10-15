@@ -172,6 +172,7 @@ idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
 
 At simple glance, it can be observed that the dataset is a data.frame containing `r format(nrow(Input_file_1),big.mark=",",scientific=F)` rows and `r format(ncol(Input_file_1),big.mark=",",scientific=F)` columns, the last one with the prediction values. It is also evident the split between numerical data and categorical data. In order to be able to address this first issue it is necessary to transform characters into factors for columns: `r format(colnames(Input_file_1[idx_isc]),big.mark=",",scientific=F)` 
 
+
 Let's explore possible values for the categorical columns 
 
 
@@ -190,6 +191,7 @@ for(i in (1:length(idx_isc))){
 }  
 
 ```
+There is also a second fact observable at simple glance. There seems not to be any missing values within our data, since whenever it occurred the field was populated with "unknown"
 
 
 
