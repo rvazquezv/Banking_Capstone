@@ -223,5 +223,17 @@ train_set$job<-factor(train_set$job)
 
 fit <- lm(y ~ age+job, data = train_set)
 
+##        II.) LOGISTIC REGRESSION
 
-fit <- glm(y ~ age+job, data = train_set)
+train_glm<-train(y~.,method="glm",data=train_set)
+predict_glm<-predict(train_glm,test_set)
+
+confusionMatrix(predict_glm,test_set$y)$overall["Accuracy"]
+
+
+##        III.) K NEAREST NEIGHBOURS
+
+train_knn<-train(y~.,method="knn",data=train_set)
+predict_knn<-predict(train_knn,test_set)
+
+confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
