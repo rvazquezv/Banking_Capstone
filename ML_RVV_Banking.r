@@ -30,6 +30,8 @@ if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
 if(!require(genefilter)) install.packages("genefilter", repos = "http://cran.us.r-project.org")
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
+if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
+if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
 
 library(tidyverse)
 library(caret)
@@ -38,6 +40,9 @@ library(rvest)
 library(httr)
 library(genefilter)
 library(e1071)
+library(rpart)
+library(randomForest)
+
 
 ###############################################################################
 ###############################################################################
@@ -222,3 +227,29 @@ train_knn<-train(y~.,method="knn",data=train_set)
 predict_knn<-predict(train_knn,test_set)
 
 confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
+
+
+
+##        IV.) DECISSION TREES
+
+train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=train_set)
+y_hat_rpart<-predict(train_rpart,test_set)
+
+confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
+
+
+##        V.) RANDOM FOREST
+
+nodesize<-seq(1,51,10)
+acc<-sapply(nodesize,function(ns){
+train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Accuracy
+})
+
+train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=z)
+y_hat_rf<-predict(train_rpart,test_set)
+
+confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
+
+
+
+
