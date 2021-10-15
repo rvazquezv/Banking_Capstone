@@ -255,7 +255,7 @@ confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
 
 ##        V.) RANDOM FOREST
 
-nodesize<-seq(1,51,10)
+nodesize<-seq(11,31,10)
 acc<-sapply(nodesize,function(ns){
 train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Accuracy
 })
