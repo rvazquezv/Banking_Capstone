@@ -93,7 +93,7 @@ substrLeft <- function(x, n){
 Next step consist on analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of classification problems.
 
 
-## 2.1 Exploratory Analysis
+## 2.1 Preliminary Analysis
 
 
 ```{r Downloading-data, message=FALSE}
@@ -148,62 +148,13 @@ eval(parse(text=z))                                                             
 After downloading source data it is observable that there are three files compressed: `r format(dw_files,big.mark=",")`
 
 
-`r format(dw_files[2],big.mark=",")` is a text document with some basic information about the remaining ones. Here it is stated that `r format(dw_files[3],big.mark=",")` is a random sample subset of `r format(dw_files[1],big.mark=",")` 
+`r format(dw_files[2],big.mark=",")` is a text document with some basic information about the remaining ones. Here it is stated that `r format(dw_files[3],big.mark=",")` is a random sample subset of `r format(dw_files[1],big.mark=",")`.
 
 Applying basic relational algebra, a simple way to confirm that a set B is a subset of another one A, is getting the cardinality of B/A, or equivalently getting the size of the anti_join function. While anti_join() return all rows from B without a match in A, having and antijoin by all columns with size 0  means that all rows in B are present in A, which indeed confirms that B is a subset of A.
 
 Hence applying anti_join to  `r format(dw_files[3],big.mark=",")` on `r format(dw_files[1],big.mark=",")` by all columns, the number of rows obtained is: `r format(nrow(anti_join(Input_file_3,Input_file_1,by=NULL)),big.mark=",",scientific=F)` which confirms that data file to be used is `r format(dw_files[1],big.mark=",")`
 
-
-Now that source data has been properly addressed, let's continue by exploring and summarizing the dataset `r format(dw_files[1],big.mark=",")`:
-
-
-```{r Exploratory Analysis, message=FALSE}
-
-head(Input_file_1[1:10])
-head(Input_file_1[11:21])
-summary(Input_file_1)
-
-
-#Build an index with all character columns in the dataset that will need to become factor
-idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
-
-```
-
-At simple glance, it can be observed that the dataset is a data.frame containing `r format(nrow(Input_file_1),big.mark=",",scientific=F)` rows and `r format(ncol(Input_file_1),big.mark=",",scientific=F)` columns, the last one with the prediction values. It is also evident the split between numerical data and categorical data. In order to be able to address this first issue it is necessary to transform characters into factors for columns: `r format(colnames(Input_file_1[idx_isc]),big.mark=",",scientific=F)` 
-
-
-Let's explore possible values for the categorical columns 
-
-
-```{r Exploratory Analysis 2, message=FALSE}
-# Get values for character columns
-for(i in (1:length(idx_isc))){
-  #The idea is building for each character column the sentence that will cast it to a factor column. For instance:
-  # Input_file_1$job<-factor(Input_file_1$job)
-  # Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression.
-  exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Input_file_1$**** expression
-  exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # factor(Input_file_1$****) expression
-  exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # levels(factor(Input_file_1$****)) expression
-  cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
-  z<-paste(eval(exp1),exp2,sep="<-")                                                         # Create a<-factor(a) expression 
-  eval(parse(text=z))    
-}  
-
-```
-There is also a second fact observable at simple glance. There seems not to be any missing values within our data, since whenever it occurred the field was populated with "unknown"
-
-
-
-Once categorical values have been transformed from character to factor, let's look again how the values of those columns are distributed
-```{r Exploratory Analysis 3, message=FALSE}
-summary(Input_file_1[idx_isc])
-
-
-```
-
-
-At this point, it is fair to assume then that description of columns of our dataset provided in file `r format(dw_files[2],big.mark=",")` is correct, stating the following:
+ Besides, `r format(dw_files[2],big.mark=",")` also provides us with a description of the fields in `r format(dw_files[1],big.mark=",")` as follows:
 
     1.  age: Age of the client.
     2.  job: Type of job of the client.
@@ -227,24 +178,120 @@ At this point, it is fair to assume then that description of columns of our data
     20. nr.employed: Number of employees - quarterly indicator.
     21. y: Output binary variable if the client has subscribed a term deposit or not. 
     
-    
+Now that source data has been properly addressed, let's continue by exploring and summarizing the dataset `r format(dw_files[1],big.mark=",")`:
 
 
-## 2.2.Transforming and partitioning original dataset
+```{r Exploratory Analysis, message=FALSE}
 
-Apart from previous transformations in original dataset related to categorical variables transformed into factor variables, there is also a implicit transformation needed. The ouput variable y, needs to be numeric so let's map it to 1 if the value is yes and to 0 in case no term deposit were subscribed.
+head(Input_file_1[1:10])
+head(Input_file_1[11:21])
+summary(Input_file_1)
 
-```{r Transforming, message=FALSE}
-Input_file_1$y<-ifelse(as.numeric(Input_file_1$y)==2,1,0)
+
+#Build an index with all character columns in the dataset that will need to become factor
+idx_isc<-which(sapply(Input_file_1,is.character)==TRUE)
+
+```
+
+At simple glance, it can be observed that the dataset is a data.frame containing `r format(nrow(Input_file_1),big.mark=",",scientific=F)` rows and `r format(ncol(Input_file_1),big.mark=",",scientific=F)` columns, the last one with the prediction values. It is also evident the split between numerical data and categorical data. In order to be able to address this first issue it is necessary to transform characters into factors for columns: `r format(colnames(Input_file_1[idx_isc]),big.mark=",",scientific=F)` 
+
+
+Let's explore possible values for the categorical columns: 
+
+
+```{r Exploratory Analysis 2, message=FALSE}
+# Get values for character columns
+for(i in (1:length(idx_isc))){
+  #The idea is building for each character column the sentence that will cast it to a factor column. For instance:
+  # Input_file_1$job<-factor(Input_file_1$job)
+  # Instead of building one by one and taking advantage of having them stored in idx_isc, I will build the expression.
+  exp1 <- expression(paste("Input_file_1",colnames(Input_file_1[idx_isc])[i],sep="$"))       # Input_file_1$**** expression
+  exp2<-expression(factor(eval(parse(text=eval(exp1)))))                                     # factor(Input_file_1$****) expression
+  exp3<-expression(levels(factor(eval(parse(text=eval(exp1))))))                             # levels(factor(Input_file_1$****)) expression
+  cat(colnames(Input_file_1[idx_isc])[i],"possible values are :",eval(exp3),"\n")
+  z<-paste(eval(exp1),exp2,sep="<-")                                                         # Create a<-factor(a) expression 
+  eval(parse(text=z))    
+}  
+
+```
+There is also a second fact observable at simple glance. There seems not to be any missing values within our data, since whenever it occurred the field was populated with "unknown".
+
+
+
+Once categorical values have been transformed from character to factor, let's look again how the values of those columns are distributed:
+```{r Exploratory Analysis 3, message=FALSE}
+summary(Input_file_1[idx_isc])
+
 
 ```
 
 
+At this point, it is fair to assume then that description of columns of our dataset provided in file `r format(dw_files[2],big.mark=",")` is correct. It is also important to recall the prevalence effect on binary variable to be predicted, around  `r format(100*mean(Input_file_1$y=="no"),big.mark=",")`% of the answers are no, which a priori matches what I would expect in terms of this marketing campaign success ratio.
 
-## 2.3 Modelling
+## 2.2.Partitioning, preprocessing and transforming original dataset
+
+As soon as original dataset inspection is concluded next step consists on partitioning, preprocessing and transforming the source dataset. 
+
+Let's start by partitioning it. In order to avoid as much as possible over-training and over-smoothing I will apply K-fold cross validation. As I do not have an independent dataset where validate the results of my models, I will remove randomly a part of the original dataset splitting it in two sets: the training dataset that I will refer as bankraw and the validation dataset, that I will call validation.
 
 
-### 2.3.1 BASELINE PREDICTORS
+To do this split I applied Pareto principle, choosing 80% of original dataset as training dataset and remaining 20% as validation one. Validation dataset will only and exclusively be used for evaluation purposes at the end of the project.
+
+
+
+```{r Partitioning 1, message=FALSE}
+
+# Validation set will be 20% of Source data according to Pareto principle
+set.seed(1978, sample.kind="Rounding") # if using R 3.5 or earlier, use `set.seed(1)`
+test_index <- createDataPartition(y = Input_file_1$y, times = 1, p = 0.2, list = FALSE)
+bankraw<- Input_file_1[-test_index,]
+Validation <- Input_file_1[test_index,]
+
+
+summary(bankraw)
+
+
+summary(Validation)
+
+```
+
+
+Once bankraw and validation were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance.
+
+```{r Partitioning 2, message=FALSE}
+
+
+## Selecting a random seed to allow replicability
+set.seed(1978, sample.kind="Rounding")
+
+
+## Creating training a testing partitions on bankraw dataset 
+
+test_index <- createDataPartition(y = bankraw$y, times = 1, p = 0.2, 
+                                  list = FALSE)
+train_set <- bankraw[-test_index,]
+test_set <- bankraw[test_index,]
+
+```
+
+
+## 2.3.Exploratory Analysis
+
+
+## 2.4 Modelling
+
+
+### 2.4.1 BASELINE PREDICTORS
+
+
+### 2.4.2 LOGISTIC REGRESSION
+
+
+### 2.4.3 K NEAREST NEIGHBOURS
+
+
+### 2.4.4 DECISSION TREES
+
 
 
 \newpage

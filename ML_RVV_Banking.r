@@ -216,11 +216,19 @@ train_set%>%ggplot(aes(y,duration)) +
   ggtitle("Bivariate Analysis on Duration") +
   labs(caption = "Figure 2")
 
+
 train_set%>%ggplot(aes(y,campaign)) +
   geom_boxplot() +
   ylab("Campaign") +
   ggtitle("Bivariate Analysis on Campaign") +
   labs(caption = "Figure 3")
+
+
+train_set%>%ggplot(aes(y,pdays)) +
+  geom_boxplot() +
+  ylab("pdays") +
+  ggtitle("Bivariate Analysis on pdays") +
+  labs(caption = "Figure 4")
 
 
 ###############################################################################
