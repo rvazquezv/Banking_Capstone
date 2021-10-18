@@ -204,19 +204,23 @@ str(train_set)
 
 
 train_set%>%ggplot(aes(y,age)) +
-  geom_point() +
+  geom_boxplot() +
   ylab("Age") +
   ggtitle("Bivariate Analysis on Age") +
   labs(caption = "Figure 1")
 
 
-
-train_set%>%ggplot(aes(y,job)) +
-  geom_point() +
-  ylab("Job") +
-  ggtitle("Bivariate Analysis on Job") +
+train_set%>%ggplot(aes(y,duration)) +
+  geom_boxplot() +
+  ylab("Duration") +
+  ggtitle("Bivariate Analysis on Duration") +
   labs(caption = "Figure 2")
 
+train_set%>%ggplot(aes(y,campaign)) +
+  geom_boxplot() +
+  ylab("Campaign") +
+  ggtitle("Bivariate Analysis on Campaign") +
+  labs(caption = "Figure 3")
 
 
 ###############################################################################
@@ -255,7 +259,7 @@ confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
 
 ##        V.) RANDOM FOREST
 
-nodesize<-seq(1,51,10)
+nodesize<-seq(11,31,10)
 acc<-sapply(nodesize,function(ns){
 train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Accuracy
 })
