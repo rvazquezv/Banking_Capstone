@@ -63,6 +63,14 @@ substrLeft <- function(x, n){
 
 
 
+## Standarize function to standarize values on a numeric vector
+Standarize <- function(x){
+  (x-mean(x))/sd(x)
+}
+
+
+
+
 ################################################################################################################
 # Download source data set, and split it between training, test and validation sets (final hold-out test set)
 ################################################################################################################
@@ -202,6 +210,10 @@ test_set <- bankraw[test_index,]
 
 str(train_set)
 
+## Preprocessing to "standarize" numerical vectors
+colnames(train_set[-idx_isc])
+length(colnames(train_set[-idx_isc]))
+
 
 train_set%>%ggplot(aes(y,age)) +
   geom_boxplot() +
@@ -279,5 +291,46 @@ confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
 
 
 
+
+
+
+
+
+z<-train_set%>%mutate(age=Standarize(age),duration=Standarize(duration),campaign=Standarize(campaign),pdays=Standarize(pdays),
+                      previous=Standarize(previous),emp.var.rate=Standarize(emp.var.rate),cons.price.idx=Standarize(cons.price.idx),
+                      cons.conf.idx=Standarize(cons.conf.idx),euribor3m=Standarize(euribor3m),nr.employed=Standarize(nr.employed))
+
+
+z_test<-test_set%>%mutate(age=Standarize(age),duration=Standarize(duration),campaign=Standarize(campaign),pdays=Standarize(pdays),
+                      previous=Standarize(previous),emp.var.rate=Standarize(emp.var.rate),cons.price.idx=Standarize(cons.price.idx),
+                      cons.conf.idx=Standarize(cons.conf.idx),euribor3m=Standarize(euribor3m),nr.employed=Standarize(nr.employed))
+
+
+
+
+
+##        II.) LOGISTIC REGRESSION
+
+z_glm<-train(y~.,method="glm",data=z)
+predict_glm_z<-predict(z_glm,z_test)
+
+confusionMatrix(predict_glm_z,test_set$y)$overall["Accuracy"]
+
+
+##        III.) K NEAREST NEIGHBOURS
+
+z_knn<-train(y~.,method="knn",data=z)
+predict_knn_z<-predict(z_knn,z_test)
+
+confusionMatrix(predict_knn_z,test_set$y)$overall["Accuracy"]
+
+
+
+##        IV.) DECISSION TREES
+
+train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=z)
+y_hat_rpart<-predict(train_rpart,z_test)
+
+confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
 
 

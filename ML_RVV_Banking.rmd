@@ -84,6 +84,12 @@ substrLeft <- function(x, n){
 }
 
 
+## Standarize function to standarize values on a numeric vector
+Standarize <- function(x){
+  (x-mean(x))/sd(x)
+}
+
+
 ```
 
 \newpage  
@@ -232,7 +238,7 @@ At this point, it is fair to assume then that description of columns of our data
 
 As soon as original dataset inspection is concluded next step consists on partitioning, preprocessing and transforming the source dataset. 
 
-Let's start by partitioning it. In order to avoid as much as possible over-training and over-smoothing I will apply K-fold cross validation. As I do not have an independent dataset where validate the results of my models, I will remove randomly a part of the original dataset splitting it in two sets: the training dataset that I will refer as bankraw and the validation dataset, that I will call validation.
+Let's start by partitioning it. In order to avoid as much as possible over-training I will apply K-fold cross validation. As I do not have an independent dataset where validate the results of my models, I will remove randomly a part of the original dataset splitting it in two sets: the training dataset that I will refer as bankraw and the validation dataset, that I will call validation.
 
 
 To do this split I applied Pareto principle, choosing 80% of original dataset as training dataset and remaining 20% as validation one. Validation dataset will only and exclusively be used for evaluation purposes at the end of the project.
@@ -256,7 +262,7 @@ summary(Validation)
 ```
 
 
-Once bankraw and validation were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance.
+Once bankraw and validation were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one.
 
 ```{r Partitioning 2, message=FALSE}
 
