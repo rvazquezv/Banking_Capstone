@@ -215,12 +215,24 @@ colnames(train_set[-idx_isc])
 length(colnames(train_set[-idx_isc]))
 
 
+
+train_set%>%ggplot(aes(age)) +
+  geom_histogram() +
+  facet_wrap(~y) +
+  ggtitle("Bivariate Analysis on Age") +
+  labs(caption = "Figure 1")
+
 train_set%>%ggplot(aes(y,age)) +
   geom_boxplot() +
   ylab("Age") +
   ggtitle("Bivariate Analysis on Age") +
   labs(caption = "Figure 1")
 
+train_set%>%ggplot(aes(duration)) +
+  geom_histogram() +
+  facet_wrap(~y) +
+  ggtitle("Bivariate Analysis on Duration") +
+  labs(caption = "Figure 2")
 
 train_set%>%ggplot(aes(y,duration)) +
   geom_boxplot() +
