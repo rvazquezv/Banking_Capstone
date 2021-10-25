@@ -284,6 +284,22 @@ test_set <- bankraw[test_index,]
 ## 2.3.Exploratory Analysis
 
 
+
+```{r Exp_Analysis, message=FALSE}
+colnames_num<-colnames(train_set[-idx_isc])
+length(colnames_num)
+
+for(j in (1:length(colnames_num))){
+train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[j]))))) +
+  geom_histogram() +
+  facet_wrap(~y) +
+  ggtitle(paste("Bivariate Analysis on",colnames_num[j])) +
+  xlab(colnames_num[j]) +
+  labs(caption = "Figure 1")
+}
+```
+
+
 ## 2.4 Modelling
 
 

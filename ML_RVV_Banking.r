@@ -211,16 +211,17 @@ test_set <- bankraw[test_index,]
 str(train_set)
 
 ## Preprocessing to "standarize" numerical vectors
-colnames(train_set[-idx_isc])
-length(colnames(train_set[-idx_isc]))
+colnames_num<-colnames(train_set[-idx_isc])
+length(colnames_num)
 
-
-
-train_set%>%ggplot(aes(age)) +
+for(i in (1:length(colnames_num))){
+train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[i]))))) +
   geom_histogram() +
   facet_wrap(~y) +
-  ggtitle("Bivariate Analysis on Age") +
+  ggtitle(paste("Bivariate Analysis on",colnames_num[i])) +
+  xlab(colnames_num[i]) +
   labs(caption = "Figure 1")
+}
 
 train_set%>%ggplot(aes(y,age)) +
   geom_boxplot() +
