@@ -288,15 +288,20 @@ test_set <- bankraw[test_index,]
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
 length(colnames_num)
+```
 
-for(j in (1:length(colnames_num))){
-train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[j]))))) +
-  geom_histogram() +
-  facet_wrap(~y) +
-  ggtitle(paste("Bivariate Analysis on",colnames_num[j])) +
-  xlab(colnames_num[j]) +
-  labs(caption = "Figure 1")
-}
+```{r Exp_Analysis 2, message=FALSE}
+
+for(i in (1:length(colnames_num))){
+  print(    
+    train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[i]))))) +
+    geom_histogram() +
+    facet_wrap(~y) +
+    ggtitle(paste("Bivariate Analysis on variable",colnames_num[i])) +
+    xlab(colnames_num[i]) +
+    labs(caption = paste("Figure ",i))
+  )
+  }
 ```
 
 

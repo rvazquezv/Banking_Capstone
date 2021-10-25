@@ -214,14 +214,17 @@ str(train_set)
 colnames_num<-colnames(train_set[-idx_isc])
 length(colnames_num)
 
+
 for(i in (1:length(colnames_num))){
-train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[i]))))) +
-  geom_histogram() +
-  facet_wrap(~y) +
-  ggtitle(paste("Bivariate Analysis on",colnames_num[i])) +
-  xlab(colnames_num[i]) +
-  labs(caption = "Figure 1")
-}
+  print(    
+    train_set%>%ggplot(aes(eval(parse(text=eval(colnames_num[i]))))) +
+    geom_histogram() +
+    facet_wrap(~y) +
+    ggtitle(paste("Bivariate Analysis on variable",colnames_num[i])) +
+    xlab(colnames_num[i]) +
+    labs(caption = paste("Figure ",i))
+  )
+  }
 
 train_set%>%ggplot(aes(y,age)) +
   geom_boxplot() +
