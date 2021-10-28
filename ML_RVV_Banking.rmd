@@ -304,6 +304,21 @@ for(i in (1:length(colnames_num))){
   }
 ```
 
+```{r Exp_Analysis 3, message=FALSE}
+for(i in (1:length(colnames_num))){
+  print(    
+    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_num[i]))))) +
+    geom_boxplot() +
+    ylab(colnames_num[i]) +
+    ggtitle(paste("Boxplot of variable",colnames_num[i])) +
+    xlab(colnames_num[i]) +
+    labs(caption = paste("Figure ",10+i))
+  )
+}
+
+
+```
+
 
 ## 2.4 Modelling
 
