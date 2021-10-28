@@ -226,38 +226,16 @@ for(i in (1:length(colnames_num))){
   )
   }
 
-train_set%>%ggplot(aes(y,age)) +
-  geom_boxplot() +
-  ylab("Age") +
-  ggtitle("Bivariate Analysis on Age") +
-  labs(caption = "Figure 1")
-
-train_set%>%ggplot(aes(duration)) +
-  geom_histogram() +
-  facet_wrap(~y) +
-  ggtitle("Bivariate Analysis on Duration") +
-  labs(caption = "Figure 2")
-
-train_set%>%ggplot(aes(y,duration)) +
-  geom_boxplot() +
-  ylab("Duration") +
-  ggtitle("Bivariate Analysis on Duration") +
-  labs(caption = "Figure 2")
-
-
-train_set%>%ggplot(aes(y,campaign)) +
-  geom_boxplot() +
-  ylab("Campaign") +
-  ggtitle("Bivariate Analysis on Campaign") +
-  labs(caption = "Figure 3")
-
-
-train_set%>%ggplot(aes(y,pdays)) +
-  geom_boxplot() +
-  ylab("pdays") +
-  ggtitle("Bivariate Analysis on pdays") +
-  labs(caption = "Figure 4")
-
+for(i in (1:length(colnames_num))){
+  print(    
+    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_num[i]))))) +
+      geom_boxplot() +
+      ylab(colnames_num[i]) +
+      ggtitle(paste("Boxplot of variable",colnames_num[i])) +
+      xlab(colnames_num[i]) +
+      labs(caption = paste("Figure ",10+i))
+  )
+}
 
 ###############################################################################
 ##
