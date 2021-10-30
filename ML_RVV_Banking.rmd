@@ -283,14 +283,12 @@ test_set <- bankraw[test_index,]
 
 ## 2.3.Exploratory Analysis
 
+One possible proccess to apply to our data is "standarize" or scale continuous variables in order to have them all in the same range of values. "Standarize" a continuous normal variable X means to build a new variable $Z=\frac{X - \mu}{\sigma}$ where $\mu$ and $\sigma$ are the mean and the standard deviation of variable X. This new variable Z will follow a N(0,1) distribution.
 
+In order to do so I have created a specific function called Standarize, but prior to applying it, it is necessary to know which of our numeric variables follow a normal distribution, so let's take a look at their histograms:
 
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
-length(colnames_num)
-```
-
-```{r Exp_Analysis 2, message=FALSE}
 
 for(i in (1:length(colnames_num))){
   print(    
@@ -303,6 +301,10 @@ for(i in (1:length(colnames_num))){
   )
   }
 ```
+
+According to their histograms, most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
+
+Now it has been observed the aforementioned fact, let's try to see how these variables are disreibuted with boxplots: 
 
 ```{r Exp_Analysis 3, message=FALSE}
 for(i in (1:length(colnames_num))){
