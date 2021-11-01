@@ -53,14 +53,14 @@ if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.
 if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
-if(!require(genefilter)) install.packages("genefilter", repos = "http://cran.us.r-project.org")
+if(!require(corrplot)) install.packages("corrplot", repos = "http://cran.us.r-project.org")
 
 library(tidyverse)
 library(caret)
 library(data.table)
 library(rvest)
 library(httr)
-library(genefilter)
+library(corrplot)
 
 ```
 
@@ -322,6 +322,14 @@ for(i in (1:length(colnames_num))){
 ```
 
 Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependdant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
+
+```{r Exp_Analysis 4, message=FALSE}
+Y<-as.numeric(train_set$y)
+M<-cbind(train_set[-idx_isc],Y)
+MC<-cor(M)
+corrplot(MC, method = "ellipse")
+```
+
 
 ## 2.4 Modelling
 

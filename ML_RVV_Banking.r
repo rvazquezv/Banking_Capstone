@@ -28,7 +28,7 @@ if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.
 if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
-if(!require(genefilter)) install.packages("genefilter", repos = "http://cran.us.r-project.org")
+if(!require(corrplot)) install.packages("corrplot", repos = "http://cran.us.r-project.org")
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
@@ -38,7 +38,7 @@ library(caret)
 library(data.table)
 library(rvest)
 library(httr)
-library(genefilter)
+library(corrplot)
 library(e1071)
 library(rpart)
 library(randomForest)
@@ -236,6 +236,12 @@ for(i in (1:length(colnames_num))){
       labs(caption = paste("Figure ",10+i))
   )
 }
+
+Y<-as.numeric(train_set$y)
+M<-cbind(train_set[-idx_isc],Y)
+MC<-cor(M)
+corrplot(MC, method = "ellipse")
+
 
 ###############################################################################
 ##
