@@ -240,10 +240,16 @@ for(i in (1:length(colnames_num))){
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
-
 ggcorrplot(MC)+
   ggtitle("Pearson's Correlation between variables")+
   labs(caption = "Figure 21")
+
+MCS<-cor(M,method = "spearman")
+
+ggcorrplot(MCS)+
+  ggtitle("Spearman's Correlation between variables")+
+  labs(caption = "Figure 22")
+
 
 ###############################################################################
 ##

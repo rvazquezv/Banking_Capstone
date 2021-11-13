@@ -321,7 +321,7 @@ for(i in (1:length(colnames_num))){
 
 ```
 
-Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependdant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
+Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
 
 ```{r Exp_Analysis 4, message=FALSE}
 Y<-as.numeric(train_set$y)
@@ -330,6 +330,15 @@ MC<-cor(M)
 ggcorrplot(MC)+
   ggtitle("Pearson's Correlation between variables")+
   labs(caption = "Figure 21")
+
+
+MCS<-cor(M,method = "spearman")
+
+ggcorrplot(MCS)+
+  ggtitle("Spearman's Correlation between variables")+
+  labs(caption = "Figure 22")
+
+
 ```
 
 
