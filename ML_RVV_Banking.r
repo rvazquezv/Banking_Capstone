@@ -28,7 +28,7 @@ if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.
 if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
-if(!require(corrplot)) install.packages("corrplot", repos = "http://cran.us.r-project.org")
+if(!require(ggcorrplot)) install.packages("corrplot", repos = "http://cran.us.r-project.org")
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
@@ -38,7 +38,7 @@ library(caret)
 library(data.table)
 library(rvest)
 library(httr)
-library(corrplot)
+library(ggcorrplot)
 library(e1071)
 library(rpart)
 library(randomForest)
@@ -240,8 +240,10 @@ for(i in (1:length(colnames_num))){
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
-corrplot(MC, method = "ellipse")
 
+ggcorrplot(MC)+
+  ggtitle("Pearson's Correlation between variables")+
+  labs(caption = "Figure 21")
 
 ###############################################################################
 ##
@@ -281,7 +283,7 @@ confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
 
 nodesize<-seq(11,31,10)
 acc<-sapply(nodesize,function(ns){
-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Accuracy
+train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Kappa
 })
 
 train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=z)
