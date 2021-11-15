@@ -28,7 +28,7 @@ if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.
 if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
-if(!require(ggcorrplot)) install.packages("corrplot", repos = "http://cran.us.r-project.org")
+if(!require(ggcorrplot)) install.packages("cggorrplot", repos = "http://cran.us.r-project.org")
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
@@ -249,6 +249,18 @@ MCS<-cor(M,method = "spearman")
 ggcorrplot(MCS)+
   ggtitle("Spearman's Correlation between variables")+
   labs(caption = "Figure 22")
+
+
+
+
+
+
+library(fastDummies)
+new_train_set = dummy_cols(train_set, select_columns = c("job","marital","education","contact","month","poutcome"))
+head(new_train_set)
+str(new_train_set)
+
+
 
 
 ###############################################################################

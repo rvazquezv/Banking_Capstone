@@ -304,14 +304,17 @@ for(i in (1:length(colnames_num))){
 
 According to their histograms, most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now it has been observed the aforementioned fact, let's try to see how these variables are distributed with boxplots: 
+Now it has been observed the aforementioned fact, let's try to see how the remaining variables are distributed with boxplots: 
 
 ```{r Exp_Analysis 3, message=FALSE}
-for(i in (1:length(colnames_num))){
+
+colnames_fac<-colnames(train_set[idx_isc])
+
+for(i in (1:length(colnames_fac))){
   print(    
-    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_num[i]))))) +
+    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_fac[i]))))) +
     geom_boxplot() +
-    ylab(colnames_num[i]) +
+    ylab(colnames_fac[i]) +
     ggtitle(paste("Boxplot of variable",colnames_num[i])) +
     xlab(colnames_num[i]) +
     labs(caption = paste("Figure ",10+i))
