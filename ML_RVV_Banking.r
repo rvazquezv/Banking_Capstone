@@ -289,10 +289,10 @@ confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
 
 nodesize<-seq(11,31,10)
 acc<-sapply(nodesize,function(ns){
-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Kappa
+train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=train_set)$results$Kappa
 })
 
-train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=z)
+train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=train_set)
 y_hat_rf<-predict(train_rpart,test_set)
 
 confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
