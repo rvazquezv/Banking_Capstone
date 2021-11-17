@@ -237,6 +237,11 @@ for(i in (1:length(colnames_num))){
   )
 }
 
+train_set%>%ggplot(aes(y)) +
+  geom_bar() +  facet_wrap(~marital)
+
+
+
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
