@@ -223,15 +223,6 @@ for(i in (1:length(idx_isc))){
 There is also a second fact observable at simple glance. There seems not to be any missing values within our data, since whenever it occurred the field was populated with "unknown".
 
 
-
-Once categorical values have been transformed from character to factor, let's look again how the values of those columns are distributed:
-```{r Exploratory Analysis 3, message=FALSE}
-summary(Input_file_1[idx_isc])
-
-
-```
-
-
 At this point, it is fair to assume then that description of columns of our dataset provided in file `r format(dw_files[2],big.mark=",")` is correct. It is also important to recall the prevalence effect on binary variable to be predicted, around  `r format(100*mean(Input_file_1$y=="no"),big.mark=",")`% of the answers are no, which a priori matches what I would expect in terms of this marketing campaign success ratio.
 
 ## 2.2.Partitioning, preprocessing and transforming original dataset
@@ -254,17 +245,23 @@ bankraw<- Input_file_1[-test_index,]
 Validation <- Input_file_1[test_index,]
 
 
+```
+
+
+Once categorical values have been transformed from character to factor, and partitions between training and validation have been created, let's look again how the values of those columns are distributed:
+```{r Partitioning 2, message=FALSE}
+
 summary(bankraw)
 
 
 summary(Validation)
 
+
 ```
 
+Finally, now that bankraw and validation datasets were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one. Once final model is chosen I will validate it on validation dataset. It is important to note that validation dataset will only used with this final purpose no taking part at all in the rest of the process
 
-Once bankraw and validation were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one.
-
-```{r Partitioning 2, message=FALSE}
+```{r Partitioning 3, message=FALSE}
 
 
 ## Selecting a random seed to allow replicability
@@ -283,9 +280,9 @@ test_set <- bankraw[test_index,]
 
 ## 2.3.Exploratory Analysis
 
-One possible proccess to apply to our data is "standarize" or scale continuous variables in order to have them all in the same range of values. "Standarize" a continuous normal variable X means to build a new variable $Z=\frac{X - \mu}{\sigma}$ where $\mu$ and $\sigma$ are the mean and the standard deviation of variable X. This new variable Z will follow a N(0,1) distribution.
+At this point it is important to visualize the data we have, so I will plot first of all numeric variables and second of all factor variables
 
-In order to do so I have created a specific function called Standarize, but prior to applying it, it is necessary to know which of our numeric variables follow a normal distribution, so let's take a look at their histograms:
+Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributiosn:
 
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
@@ -302,21 +299,27 @@ for(i in (1:length(colnames_num))){
   }
 ```
 
-According to their histograms, most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now it has been observed the aforementioned fact, let's try to see how the remaining variables are distributed with boxplots: 
+One possible proccess to apply to our data is "standarize" or scale continuous variables in order to have them all in the same range of values. "Standarize" a continuous normal variable X means to build a new variable $Z=\frac{X - \mu}{\sigma}$ where $\mu$ and $\sigma$ are the mean and the standard deviation of variable X. This new variable Z will follow a N(0,1) distribution.
 
-```{r Exp_Analysis 3, message=FALSE}
+In order to do so I have created a specific function called Standarize, but prior to applying it, it is necessary to know which of our numeric variables follow a normal distribution.
+
+According to their histograms, plotted in Figure 1 to Figure 10 , most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
+
+Now it has been observed the aforementioned fact, let's try to see how the factor variables are distributed: 
+
+```{r Exp_Analysis 2, message=FALSE}
 
 colnames_fac<-colnames(train_set[idx_isc])
 
-for(i in (1:length(colnames_fac))){
+n<-length(colnames_fac)-1
+
+for(i in (1:n)){
   print(    
-    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_fac[i]))))) +
-    geom_boxplot() +
-    ylab(colnames_fac[i]) +
-    ggtitle(paste("Boxplot of variable",colnames_num[i])) +
-    xlab(colnames_num[i]) +
+    train_set%>%ggplot(aes(y)) +
+    geom_bar() +
+    facet_wrap(~eval(parse(text=eval(colnames_fac[i])))) +  
+        ggtitle(paste("Bivariate Analysis on variable",colnames_fac[i])) +
     labs(caption = paste("Figure ",10+i))
   )
 }
@@ -326,7 +329,7 @@ for(i in (1:length(colnames_fac))){
 
 Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
 
-```{r Exp_Analysis 4, message=FALSE}
+```{r Exp_Analysis 3, message=FALSE}
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
