@@ -248,18 +248,15 @@ Validation <- Input_file_1[test_index,]
 ```
 
 
-Once categorical values have been transformed from character to factor, and partitions between training and validation have been created, let's look again how the values of those columns are distributed:
+Once categorical values have been transformed from character to factor, and partitions between bankraw and validation have been created, let's look again how the values of those columns are distributed within bankraw dataset:
 ```{r Partitioning 2, message=FALSE}
 
 summary(bankraw)
 
 
-summary(Validation)
-
-
 ```
 
-Finally, now that bankraw and validation datasets were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one. Once final model is chosen I will validate it on validation dataset. It is important to note that validation dataset will only used with this final purpose no taking part at all in the rest of the process
+Finally, now that bankraw and validation datasets were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one. Once final model is chosen, and only at that point, validation dataset will be used. 
 
 ```{r Partitioning 3, message=FALSE}
 
@@ -280,9 +277,11 @@ test_set <- bankraw[test_index,]
 
 ## 2.3.Exploratory Analysis
 
-At this point it is important to visualize the data we have, so I will plot first of all numeric variables and second of all factor variables
+At this point it is important to visualize the data we have, so I will plot first of all numeric variables and second of all factor variables within the training set.
 
-Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributiosn:
+It is important to note that a very simple and common form of statistical analysis is the bivariate analysis. In consists on comparing two variables, one against the other. In our case, it is a matter of comparing each independent variable against the dependent variable "y" we want to predict.
+
+Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributions and their influence on the final result:
 
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
@@ -306,7 +305,7 @@ In order to do so I have created a specific function called Standarize, but prio
 
 According to their histograms, plotted in Figure 1 to Figure 10 , most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now it has been observed the aforementioned fact, let's try to see how the factor variables are distributed: 
+Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables: 
 
 ```{r Exp_Analysis 2, message=FALSE}
 
@@ -326,6 +325,8 @@ for(i in (1:n)){
 
 
 ```
+
+Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to 
 
 Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
 

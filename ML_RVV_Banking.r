@@ -210,7 +210,7 @@ test_set <- bankraw[test_index,]
 
 str(train_set)
 
-## Preprocessing to "standarize" numerical vectors
+## Bivariate Analysis on numerical variables  
 colnames_num<-colnames(train_set[-idx_isc])
 length(colnames_num)
 
@@ -224,23 +224,25 @@ for(i in (1:length(colnames_num))){
     xlab(colnames_num[i]) +
     labs(caption = paste("Figure ",i))
   )
-  }
-
-for(i in (1:length(colnames_num))){
-  print(    
-    train_set%>%ggplot(aes(y,eval(parse(text=eval(colnames_num[i]))))) +
-      geom_boxplot() +
-      ylab(colnames_num[i]) +
-      ggtitle(paste("Boxplot of variable",colnames_num[i])) +
-      xlab(colnames_num[i]) +
-      labs(caption = paste("Figure ",10+i))
-  )
 }
 
-train_set%>%ggplot(aes(y)) +
-  geom_bar() +  facet_wrap(~marital)
-
-
+  
+## Bivariate Analysis on categorical variables  
+  
+colnames_fac<-colnames(train_set[idx_isc])
+  
+  n<-length(colnames_fac)-1
+  
+  for(i in (1:n)){
+    print(    
+      train_set%>%ggplot(aes(y)) +
+        geom_bar() +
+        facet_wrap(~eval(parse(text=eval(colnames_fac[i])))) +  
+        ggtitle(paste("Bivariate Analysis on variable",colnames_fac[i])) +
+        labs(caption = paste("Figure ",10+i))
+    )
+  }
+  
 
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
