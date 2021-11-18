@@ -96,7 +96,19 @@ Standarize <- function(x){
 
 # 2 Methodology
 
-Next step consist on analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of classification problems.
+On this section, following tasks such as  analyzing the data provided, cleaning, wrangling and preparing it in case of actions were needed to decide which kind of algorithms will be worthy in terms of classification problems, will be adressed.
+
+Thus next steps will be:
+
+  A preliminary analysis where basically observing and sumarizing source files and datasets.
+  
+  A cross validation to split source dataset into training, testing and validation datasets. 
+
+  A bivariate and multivariate analysis on training dataset to decide which features include or discard from candidate models. 
+
+  A modeling phase where some classifier models will be trained to predict dependent variable. 
+  
+  A decision phase where based on results obtained on test set with the previous models deciding which one to chose or ensemble.
 
 
 ## 2.1 Preliminary Analysis
@@ -279,9 +291,11 @@ test_set <- bankraw[test_index,]
 
 At this point it is important to visualize the data we have, so I will plot first of all numeric variables and second of all factor variables within the training set.
 
-It is important to note that a very simple and common form of statistical analysis is the bivariate analysis. In consists on comparing two variables, one against the other. In our case, it is a matter of comparing each independent variable against the dependent variable "y" we want to predict.
+It is important to note that a very simple and common form of statistical analysis is the bivariate analysis. In consists on comparing two variables, one against the other. In our case, it is a matter of comparing each independent variable against the dependent variable "Y" we want to predict.
 
-Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributions and their influence on the final result:
+Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributions and their influence on the final result. 
+
+Figures 1 to 10 will show the bivariate analysis on numerical variables
 
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
@@ -305,7 +319,10 @@ In order to do so I have created a specific function called Standarize, but prio
 
 According to their histograms, plotted in Figure 1 to Figure 10 , most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables: 
+Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables
+
+
+Figures 11 to 20 will show the bivariate analysis on categorical variables
 
 ```{r Exp_Analysis 2, message=FALSE}
 
@@ -326,10 +343,9 @@ for(i in (1:n)){
 
 ```
 
-Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to 
+Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to identify prediction power, wich variables are providing same kind of information and finally allow us to choose if all variables make sense within the model or on the other hand some of them can de disregarded.
 
-Finally, let's analyze Pearson and Spearman correlation between numeric variables and dependant variable Y, to try to find out if all variables are needed for our candidate models or on the other hand if some variable can be dismissed:
-
+In order to perform this multivariate analysis, let's analyze Pearson correlation between numeric variables and dependent variable "Y"
 ```{r Exp_Analysis 3, message=FALSE}
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
@@ -348,6 +364,8 @@ ggcorrplot(MCS)+
 
 ```
 
+
+For categorical variables we will need a little bit of extra work.
 
 ## 2.4 Modelling
 
