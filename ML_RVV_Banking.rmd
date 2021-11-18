@@ -319,10 +319,10 @@ In order to do so I have created a specific function called Standarize, but prio
 
 According to their histograms, plotted in Figure 1 to Figure 10 , most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables
+Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables.
 
 
-Figures 11 to 20 will show the bivariate analysis on categorical variables
+Figures 11 to 20 will show the bivariate analysis on categorical variables.
 
 ```{r Exp_Analysis 2, message=FALSE}
 
