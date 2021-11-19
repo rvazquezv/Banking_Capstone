@@ -54,6 +54,12 @@ if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
 if(!require(ggcorrplot)) install.packages("ggcorrplot", repos = "http://cran.us.r-project.org")
+if(!require(fastDummies)) install.packages("fastDummies", repos = "http://cran.us.r-project.org")
+if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
+if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
+if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
+
+
 
 library(tidyverse)
 library(caret)
@@ -61,6 +67,11 @@ library(data.table)
 library(rvest)
 library(httr)
 library(ggcorrplot)
+library(fastDummies)
+library(e1071)
+library(rpart)
+library(randomForest)
+
 
 ```
 
@@ -293,9 +304,7 @@ At this point it is important to visualize the data we have, so I will plot firs
 
 It is important to note that a very simple and common form of statistical analysis is the bivariate analysis. In consists on comparing two variables, one against the other. In our case, it is a matter of comparing each independent variable against the dependent variable "Y" we want to predict.
 
-Let's start with the histograms for numeric variables. This will allow us to get a first impression on those numeric variables distributions and their influence on the final result. 
-
-Figures 1 to 10 will show the bivariate analysis on numerical variables
+Let's start with the histograms for numeric variables splitting by dependent variable. This will allow us to get a first impression on those numeric variables distributions and their influence on the final result. Figures 1 to 10 will show this  analysis:
 
 ```{r Exp_Analysis, message=FALSE}
 colnames_num<-colnames(train_set[-idx_isc])
@@ -313,13 +322,12 @@ for(i in (1:length(colnames_num))){
 ```
 
 
-One possible proccess to apply to our data is "standarize" or scale continuous variables in order to have them all in the same range of values. "Standarize" a continuous normal variable X means to build a new variable $Z=\frac{X - \mu}{\sigma}$ where $\mu$ and $\sigma$ are the mean and the standard deviation of variable X. This new variable Z will follow a N(0,1) distribution.
+It is remarkable to state that another common process to apply to our data is "standarize" or scale continuous variables in order to have them all in the same range of values. "Standarize" a continuous normal variable X means to build a new variable $Z=\frac{X - \mu}{\sigma}$ where $\mu$ and $\sigma$ are the mean and the standard deviation of variable X. This new variable Z will follow a N(0,1) distribution.
 
-In order to do so I have created a specific function called Standarize, but prior to applying it, it is necessary to know which of our numeric variables follow a normal distribution.
+Nevertheless, despite creating a specific function called Standarize, as no numeric variable follows a normal distribution, as it is clearly observed in Figure 1 to Figure 10, it does not make sense to standarize continuous variables.
 
-According to their histograms, plotted in Figure 1 to Figure 10 , most of our numeric variables do not follow a normal distribution, so the idea of standarizing may only apply to age.
 
-Now bivariate analysis has been applied to numeric independent variables, let's also apply it to discrete independent variables.
+Now bivariate analysis has been performed on numeric independent variables, let's also apply it to discrete independent variables.
 
 
 Figures 11 to 20 will show the bivariate analysis on categorical variables.
@@ -343,7 +351,7 @@ for(i in (1:n)){
 
 ```
 
-Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to identify prediction power, wich variables are providing same kind of information and finally allow us to choose if all variables make sense within the model or on the other hand some of them can de disregarded.
+Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to identify prediction power, which variables are providing same kind of information and finally allow us to choose if all variables make sense within the model or on the other hand some of them can de disregarded.
 
 In order to perform this multivariate analysis, let's analyze Pearson correlation between numeric variables and dependent variable "Y"
 ```{r Exp_Analysis 3, message=FALSE}
@@ -364,8 +372,24 @@ ggcorrplot(MCS)+
 
 ```
 
+Now, let's do the same for categorical variables, although here some pieces of extra work will be needed.
+Where a categorical variable has more than two categories, it can be represented by a set of binary variables, with one variable for each category. In R, there are several ways to perform this task, one of them library fastDummies  
 
-For categorical variables we will need a little bit of extra work.
+```{r Exp_Analysis 4, message=FALSE}
+new_train_set<-train_set%>%select(colnames_fac) %>% 
+               dummy_cols(., select_columns = c("job","marital","education","contact","month","poutcome"))
+
+YC<-as.numeric(train_set$y)
+MC<-cbind(new_train_set[,12:50],YC)
+
+MCC<-cor(MC)
+ggcorrplot(MCC)+
+  ggtitle("Pearson's Correlation between categorical variables")+
+  labs(caption = "Figure 23")
+
+
+
+```
 
 ## 2.4 Modelling
 

@@ -28,10 +28,13 @@ if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.
 if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(rvest)) install.packages("rvest", repos = "http://cran.us.r-project.org")
 if(!require(httr)) install.packages("httr", repos = "http://cran.us.r-project.org")
-if(!require(ggcorrplot)) install.packages("cggorrplot", repos = "http://cran.us.r-project.org")
+if(!require(ggcorrplot)) install.packages("ggcorrplot", repos = "http://cran.us.r-project.org")
+if(!require(fastDummies)) install.packages("fastDummies", repos = "http://cran.us.r-project.org")
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
+
+
 
 library(tidyverse)
 library(caret)
@@ -39,6 +42,7 @@ library(data.table)
 library(rvest)
 library(httr)
 library(ggcorrplot)
+library(fastDummies)
 library(e1071)
 library(rpart)
 library(randomForest)
@@ -159,8 +163,6 @@ for(i in (1:length(idx_isc))){
   eval(parse(text=z))    
 }  
 
-
-
 ###############################################################################
 ###############################################################################
 ##
@@ -226,7 +228,7 @@ for(i in (1:length(colnames_num))){
   )
 }
 
-  
+
 ## Bivariate Analysis on categorical variables  
   
 colnames_fac<-colnames(train_set[idx_isc])
@@ -244,11 +246,14 @@ colnames_fac<-colnames(train_set[idx_isc])
   }
   
 
+## Multivariate Analysis on numerical variables  
+  
+  
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
 ggcorrplot(MC)+
-  ggtitle("Pearson's Correlation between variables")+
+  ggtitle("Pearson's Correlation between numerical variables")+
   labs(caption = "Figure 21")
 
 MCS<-cor(M,method = "spearman")
@@ -260,14 +265,18 @@ ggcorrplot(MCS)+
 
 
 
+## Multivariate Analysis on categorical variables  
 
+new_train_set<-train_set%>%select(colnames_fac) %>% 
+               dummy_cols(., select_columns = c("job","marital","education","contact","month","poutcome"))
 
-library(fastDummies)
-new_train_set = dummy_cols(train_set, select_columns = c("job","marital","education","contact","month","poutcome"))
-head(new_train_set)
-str(new_train_set)
+YC<-as.numeric(train_set$y)
+MC<-cbind(new_train_set[,12:50],YC)
 
-
+MCC<-cor(MC)
+ggcorrplot(MCC)+
+  ggtitle("Pearson's Correlation between categorical variables")+
+  labs(caption = "Figure 23")
 
 
 ###############################################################################
