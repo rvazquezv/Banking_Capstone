@@ -260,7 +260,7 @@ MCS<-cor(M,method = "spearman")
 
 ggcorrplot(MCS)+
   ggtitle("Spearman's Correlation between variables")+
-  labs(caption = "Figure 22")
+  labs(caption = "Figure 21.b")
 
 
 
@@ -270,13 +270,35 @@ ggcorrplot(MCS)+
 new_train_set<-train_set%>%select(colnames_fac) %>% 
                dummy_cols(., select_columns = c("job","marital","education","contact","month","poutcome"))
 
-YC<-as.numeric(train_set$y)
-MC<-cbind(new_train_set[,12:50],YC)
+Y<-as.numeric(train_set$y)
+MC1<-cbind(new_train_set[,12:35],Y)
+MC2<-cbind(new_train_set[,36:50],Y)
 
-MCC<-cor(MC)
-ggcorrplot(MCC)+
+MCC1<-cor(MC1)
+ggcorrplot(MCC1)+
+  ggtitle("Pearson's Correlation between categorical variables")+
+  labs(caption = "Figure 22")
+
+
+
+MCC2<-cor(MC2)
+ggcorrplot(MCC2)+
   ggtitle("Pearson's Correlation between categorical variables")+
   labs(caption = "Figure 23")
+
+
+
+
+
+
+## Selecting principal variables
+
+which(abs(MC[,11])>=0.3)
+
+which(abs(MCC1[,25])>=0.3)
+
+which(abs(MCC2[,16])>=0.3)
+
 
 
 ###############################################################################
@@ -321,7 +343,7 @@ train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=train_set)$re
 })
 
 train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=train_set)
-y_hat_rf<-predict(train_rpart,test_set)
+y_hat_rf<-predict(train_rf,test_set)
 
 confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
 
@@ -332,14 +354,9 @@ confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
 
 
 
-z<-train_set%>%mutate(age=Standarize(age),duration=Standarize(duration),campaign=Standarize(campaign),pdays=Standarize(pdays),
-                      previous=Standarize(previous),emp.var.rate=Standarize(emp.var.rate),cons.price.idx=Standarize(cons.price.idx),
-                      cons.conf.idx=Standarize(cons.conf.idx),euribor3m=Standarize(euribor3m),nr.employed=Standarize(nr.employed))
+z<-train_set%>%select(duration,pdays,euribor3m,nr.employed,poutcome,y)
 
-
-z_test<-test_set%>%mutate(age=Standarize(age),duration=Standarize(duration),campaign=Standarize(campaign),pdays=Standarize(pdays),
-                      previous=Standarize(previous),emp.var.rate=Standarize(emp.var.rate),cons.price.idx=Standarize(cons.price.idx),
-                      cons.conf.idx=Standarize(cons.conf.idx),euribor3m=Standarize(euribor3m),nr.employed=Standarize(nr.employed))
+z_test<-test_set%>%select(duration,pdays,euribor3m,nr.employed,poutcome,y)
 
 
 
@@ -368,5 +385,21 @@ train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25))
 y_hat_rpart<-predict(train_rpart,z_test)
 
 confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
+
+
+
+
+##        V.) RANDOM FOREST
+
+nodesize<-seq(1,51,10)
+acc<-sapply(nodesize,function(ns){
+  train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Kappa
+})
+
+train_rf_z<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=z)
+y_hat_rf_z<-predict(train_rf_z,test_set)
+
+confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
+
 
 

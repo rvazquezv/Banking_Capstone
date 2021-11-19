@@ -361,35 +361,39 @@ MC<-cor(M)
 ggcorrplot(MC)+
   ggtitle("Pearson's Correlation between variables")+
   labs(caption = "Figure 21")
-
-
-MCS<-cor(M,method = "spearman")
-
-ggcorrplot(MCS)+
-  ggtitle("Spearman's Correlation between variables")+
-  labs(caption = "Figure 22")
-
-
 ```
 
 Now, let's do the same for categorical variables, although here some pieces of extra work will be needed.
-Where a categorical variable has more than two categories, it can be represented by a set of binary variables, with one variable for each category. In R, there are several ways to perform this task, one of them library fastDummies  
+Where a categorical variable has more than two categories, it can be represented by a set of binary variables, with one variable for each category. In R, there are several ways to perform this task, being one of them the package fastDummies. Function dummy_cols on this package will allow to "binarize" discrete variables. 
+
+Once discrete variables have been "binarized", let's perform also Pearson's correlation. For simplicity's sake, due to high number of dummy variables created, instead of plotting all together, I have plotted them in two halves.
+
 
 ```{r Exp_Analysis 4, message=FALSE}
 new_train_set<-train_set%>%select(colnames_fac) %>% 
                dummy_cols(., select_columns = c("job","marital","education","contact","month","poutcome"))
 
-YC<-as.numeric(train_set$y)
-MC<-cbind(new_train_set[,12:50],YC)
+MC1<-cbind(new_train_set[,12:35],Y)
+MC2<-cbind(new_train_set[,36:50],Y)
 
-MCC<-cor(MC)
-ggcorrplot(MCC)+
+MCC1<-cor(MC1)
+ggcorrplot(MCC1)+
   ggtitle("Pearson's Correlation between categorical variables")+
   labs(caption = "Figure 23")
 
 
 
+MCC2<-cor(MC2)
+ggcorrplot(MCC2)+
+  ggtitle("Pearson's Correlation between categorical variables")+
+  labs(caption = "Figure 24")
+
+
 ```
+
+
+At this point some relevant information has been unveiled.Some variables seem to be more relevant regarding "Y" than others.
+Hence variables "euribor3m","nr.employed","emp.var.rate","pdays","previous", "duration" 
 
 ## 2.4 Modelling
 
