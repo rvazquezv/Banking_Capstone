@@ -232,8 +232,7 @@ for(i in (1:length(colnames_num))){
 ## Bivariate Analysis on categorical variables  
   
 colnames_fac<-colnames(train_set[idx_isc])
-  
-  n<-length(colnames_fac)-1
+n<-length(colnames_fac)-1
   
   for(i in (1:n)){
     print(    
@@ -291,15 +290,27 @@ ggcorrplot(MCC2)+
 
 
 
-## Selecting principal variables
+## Selecting principal variables, correlation greater than an arbitrary threshold
 
-which(abs(MC[,11])>=0.3)
+idx1<-which(abs(MC[,11])>=0.3)
 
-which(abs(MCC1[,25])>=0.3)
+idx2<-which(abs(MCC1[,25])>=0.3)
 
-which(abs(MCC2[,16])>=0.3)
+idx3<-which(abs(MCC2[,16])>=0.3)
 
+## Taking off dependent variable from independent variables list
 
+fidx1<-grepl("Y",names(idx1))
+
+fidx2<-grepl("Y",names(idx2))
+
+fidx3<-grepl("Y",names(idx3))
+
+## Storing principal variables into final_vars vector
+
+final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),names(idx3[!fidx3]))
+
+final_vars
 
 ###############################################################################
 ##

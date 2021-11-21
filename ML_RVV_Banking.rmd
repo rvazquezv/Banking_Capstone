@@ -393,7 +393,36 @@ ggcorrplot(MCC2)+
 
 
 At this point some relevant information has been unveiled.Some variables seem to be more relevant regarding "Y" than others.
-Hence variables "euribor3m","nr.employed","emp.var.rate","pdays","previous", "duration" 
+Hence following variables will be the candidate ones to take part in my models: 
+
+
+```{r Exp_Analysis 5, message=FALSE}
+
+
+## Selecting principal variables, correlation greater than an arbitrary threshold
+
+idx1<-which(abs(MC[,11])>=0.3)
+
+idx2<-which(abs(MCC1[,25])>=0.3)
+
+idx3<-which(abs(MCC2[,16])>=0.3)
+
+## Taking off dependent variable from independent variables list
+
+fidx1<-grepl("Y",names(idx1))
+
+fidx2<-grepl("Y",names(idx2))
+
+fidx3<-grepl("Y",names(idx3))
+
+## Storing principal variables into final_vars vector
+
+final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),names(idx3[!fidx3]))
+
+final_vars
+
+```
+
 
 ## 2.4 Modelling
 
