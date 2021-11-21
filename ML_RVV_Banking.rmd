@@ -119,7 +119,7 @@ Thus next steps will be:
 
   A modeling phase where some classifier models will be trained to predict dependent variable. 
   
-  A decision phase where based on results obtained on test set with the previous models deciding which one to chose or ensemble.
+  A decision phase where based on results obtained on test set with the previous models deciding which one to choose or ensemble.
 
 
 ## 2.1 Preliminary Analysis
@@ -426,8 +426,23 @@ final_vars
 
 ## 2.4 Modelling
 
+As previously stated the final objective is building a classification system to predict if the client would subscribe a term deposit or not. Supervised learning classification algorithms learn from labeled data, in our case the bankraw dataset we have already described, with the "y" label being a binary variable, so we are facing the most simple classification problem.
+
+Nowadays there are several well-known supervised learning classification algorithms such as logistic regression, k nearest neighbors, decision trees, random forest, support vector machines or neuronal networks, having all of them different pros and cons.
+
+On their paper "A data-driven approach to predict the success of bank telemarketing"  [Moro et al., 2014] they compared logistic regression, decision trees, support vector machines and neuronal networks finding that NN performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
+
+Besides, following approach taken in previous project "ML_RVV_Capstone_Project" I have also included a baseline predictor to set as reference.
+
+Finally, some decisions regarding primary metrics used to choose candidates models will also be necessary and discussed later.
+
 
 ### 2.4.1 BASELINE PREDICTORS
+
+Baselines for predictive models or baseline predictors are performance evaluations for given problems in statistics. Baselines are commonly used as the first approach and the limit that should at least be reached.
+
+In doing so, the first baseline stage will be the naive one, just only calculating the average stars.
+
 
 
 ### 2.4.2 LOGISTIC REGRESSION
