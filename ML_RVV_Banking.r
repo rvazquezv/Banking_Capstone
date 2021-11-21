@@ -315,10 +315,18 @@ final_vars
 ###############################################################################
 ##
 ##        Modelling
-##        I.) BASELINE
+##      
 ###############################################################################
 
 
+##        I.) BASELINE 
+
+predict_baseline<-test_set%>%mutate(y_hat="no")%>%select(factor(y_hat))
+
+confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
+
+
+predict_baseline$y_hat<-factor(predict_baseline$y_hat)
 
 
 ##        II.) LOGISTIC REGRESSION

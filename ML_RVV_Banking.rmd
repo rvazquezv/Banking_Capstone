@@ -441,9 +441,13 @@ Finally, some decisions regarding primary metrics used to choose candidates mode
 
 Baselines for predictive models or baseline predictors are performance evaluations for given problems in statistics. Baselines are commonly used as the first approach and the limit that should at least be reached.
 
-In doing so, the first baseline stage will be the naive one, just only calculating the average stars.
+In doing so, the first baseline stage will be the naive one, just only assuming results will always be no.
 
 
+$$\hat{Y}=0$$  
+
+
+being $\hat{Y}$ the predicted result, with 0 as no suscription and 1 as suscription.
 
 ### 2.4.2 LOGISTIC REGRESSION
 
