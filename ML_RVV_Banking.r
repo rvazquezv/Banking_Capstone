@@ -321,12 +321,10 @@ final_vars
 
 ##        I.) BASELINE 
 
-predict_baseline<-test_set%>%mutate(y_hat="no")%>%select(factor(y_hat))
+predict_baseline<- sample(c("no"), length(test_set$y), replace = TRUE) %>%
+  factor(levels = levels(test_set$y))
 
 confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
-
-
-predict_baseline$y_hat<-factor(predict_baseline$y_hat)
 
 
 ##        II.) LOGISTIC REGRESSION
