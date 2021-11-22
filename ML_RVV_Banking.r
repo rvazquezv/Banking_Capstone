@@ -326,6 +326,8 @@ predict_baseline<- sample(c("no"), length(test_set$y), replace = TRUE) %>%
 
 confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
 
+confusionMatrix(predict_baseline,test_set$y)$byClass["Balanced Accuracy"]
+
 
 ##        II.) LOGISTIC REGRESSION
 
