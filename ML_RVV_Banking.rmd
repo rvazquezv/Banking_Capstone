@@ -449,6 +449,18 @@ $$\hat{Y}=0$$
 
 being $\hat{Y}$ the predicted result, with 0 as no suscription and 1 as suscription.
 
+```{r Baseline , message=FALSE}
+
+predict_baseline<- sample(c("no"), length(test_set$y), replace = TRUE) %>%
+  factor(levels = levels(test_set$y))
+
+confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
+
+confusionMatrix(predict_baseline,test_set$y)$byClass["Balanced Accuracy"]
+
+
+```
+
 ### 2.4.2 LOGISTIC REGRESSION
 
 
