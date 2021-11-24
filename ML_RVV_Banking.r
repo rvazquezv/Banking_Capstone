@@ -321,12 +321,18 @@ final_vars
 
 ##        I.) BASELINE 
 
+
 predict_baseline<- sample(c("no"), length(test_set$y), replace = TRUE) %>%
   factor(levels = levels(test_set$y))
 
-confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
+Acc<-confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
+Bacc<-confusionMatrix(predict_baseline,test_set$y)$byClass["Balanced Accuracy"]
+Sen<-confusionMatrix(predict_baseline,test_set$y)$byClass["Sensitivity"]
+Spe<-confusionMatrix(predict_baseline,test_set$y)$byClass["Specificity"]
 
-confusionMatrix(predict_baseline,test_set$y)$byClass["Balanced Accuracy"]
+## Save results to table
+Results <- tibble(method = "Naive", Accuracy = Acc, Balanced_Accuracy = Bacc, Sensitivity = Sen, Specificity = Spe)
+Results
 
 
 ##        II.) LOGISTIC REGRESSION
