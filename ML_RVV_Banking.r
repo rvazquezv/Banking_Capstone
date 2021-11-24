@@ -340,7 +340,11 @@ Results
 train_glm<-train(y~.,method="glm",data=train_set)
 predict_glm<-predict(train_glm,test_set)
 
-confusionMatrix(predict_glm,test_set$y)$overall["Accuracy"]
+
+Acc_glm<-confusionMatrix(predict_glm,test_set$y)$overall["Accuracy"]
+Bacc_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Balanced Accuracy"]
+Sen_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Sensitivity"]
+Spe_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Specificity"]
 
 
 ##        III.) K NEAREST NEIGHBOURS
