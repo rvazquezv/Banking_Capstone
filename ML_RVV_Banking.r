@@ -346,6 +346,11 @@ Bacc_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Balanced Accuracy"]
 Sen_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Sensitivity"]
 Spe_glm<-confusionMatrix(predict_glm,test_set$y)$byClass["Specificity"]
 
+## Save results to table
+Results<-rbind(Results,tibble(method = "Logistic Regression", Accuracy = Acc_glm, Balanced_Accuracy = Bacc_glm,
+                              Sensitivity = Sen_glm, Specificity = Spe_glm))
+Results
+
 
 ##        III.) K NEAREST NEIGHBOURS
 
