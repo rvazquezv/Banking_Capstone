@@ -321,6 +321,7 @@ final_train_set<-train_set%>%select(final_vars,y)
 ###############################################################################
 
 
+
 ##        I.) BASELINE 
 
 
@@ -356,7 +357,7 @@ Results
 
 ##        III.) K NEAREST NEIGHBOURS
 
-train_knn<-train(y~.,method="knn",data=train_set)
+train_knn<-train(y~.,method="knn",data=final_train_set)
 predict_knn<-predict(train_knn,test_set)
 
 Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
@@ -371,13 +372,20 @@ Results
 
 
 
-##        IV.) DECISSION TREES
+##        IV.) DECISION TREES
 
-train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=train_set)
-y_hat_rpart<-predict(train_rpart,test_set)
+train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=final_train_set)
+predict_rpart<-predict(train_rpart,test_set)
 
-confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
+Acc_rpart<-confusionMatrix(predict_rpart,test_set$y)$overall["Accuracy"]
+Bacc_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Balanced Accuracy"]
+Sen_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Sensitivity"]
+Spe_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Specificity"]
 
+## Save results to table
+Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
+                              Sensitivity = Sen_rpart, Specificity = Spe_rpart))
+Results
 
 ##        V.) RANDOM FOREST
 
