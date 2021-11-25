@@ -308,9 +308,11 @@ fidx3<-grepl("Y",names(idx3))
 
 ## Storing principal variables into final_vars vector
 
-final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),names(idx3[!fidx3]))
+final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),substrLeft(names(idx3[!fidx3]),8))
 
 final_vars
+
+final_train_set<-train_set%>%select(final_vars,y)
 
 ###############################################################################
 ##
@@ -337,7 +339,7 @@ Results
 
 ##        II.) LOGISTIC REGRESSION
 
-train_glm<-train(y~.,method="glm",data=train_set)
+train_glm<-train(y~.,method="glm",data=final_train_set)
 predict_glm<-predict(train_glm,test_set)
 
 
@@ -357,7 +359,15 @@ Results
 train_knn<-train(y~.,method="knn",data=train_set)
 predict_knn<-predict(train_knn,test_set)
 
-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
+Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
+Bacc_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Balanced Accuracy"]
+Sen_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Sensitivity"]
+Spe_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Specificity"]
+
+## Save results to table
+Results<-rbind(Results,tibble(method = "K Nearest Neighbors", Accuracy = Acc_knn, Balanced_Accuracy = Bacc_knn,
+                              Sensitivity = Sen_knn, Specificity = Spe_knn))
+Results
 
 
 

@@ -359,7 +359,7 @@ Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
 MC<-cor(M)
 ggcorrplot(MC)+
-  ggtitle("Pearson's Correlation between variables")+
+  ggtitle("Pearson's Correlation between numerical variables")+
   labs(caption = "Figure 21")
 ```
 
@@ -417,9 +417,12 @@ fidx3<-grepl("Y",names(idx3))
 
 ## Storing principal variables into final_vars vector
 
-final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),names(idx3[!fidx3]))
+
+final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),substrLeft(names(idx3[!fidx3]),8))
 
 final_vars
+
+final_train_set<-train_set%>%select(final_vars,y)
 
 ```
 
@@ -466,6 +469,7 @@ Results
 
 ```
 
+As already mentioned earlier, `r format(100*mean(train_set$y=="no"),big.mark=",")`% of answers are no in train set which explains why naive model has `r format(Acc,big.mark=",")` accuracy. Hence prevalency is an issue within our original dataset and accuracy is not the best metric to consider. In order to mitigate prevalence as much as possible  I will also explore balance accuracy, sensitivity and specificity for all candidate models.
 
 ### 2.4.2 LOGISTIC REGRESSION
 
