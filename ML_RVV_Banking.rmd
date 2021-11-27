@@ -482,7 +482,7 @@ Results
 Logistic regression  is a specific case of a set of generalized linear models (glm) and it extends the regression approach to categorical data. It measures the relationship between the categorical dependent variable and one or more independent variables by estimating probabilities using a logistic function.
 The logistic regression can be understood simply as finding the $\beta\beta$  parameters that best fit:
 
-$$ y={\begin{cases}1&\beta _{0}+\beta _{1}x+\varepsilon >0\\0&{\text{else}}\end{cases}}$$
+$$ \hat{Y}={\begin{cases}1&\beta _{0}+\beta _{1}x+\varepsilon >0\\0&{\text{else}}\end{cases}}$$
 
 
 Applied to our data using train function in caret package with glm method, following results are obtained
