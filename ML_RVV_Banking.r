@@ -312,7 +312,7 @@ final_vars<-c(names(idx1[!fidx1]),names(idx2[!fidx2]),substrLeft(names(idx3[!fid
 
 final_vars
 
-final_train_set<-train_set%>%select(final_vars,y)
+reduced_train_set<-train_set%>%select(final_vars,y)
 
 ###############################################################################
 ##
@@ -340,7 +340,7 @@ Results
 
 ##        II.) LOGISTIC REGRESSION
 
-train_glm<-train(y~.,method="glm",data=final_train_set)
+train_glm<-train(y~.,method="glm",data=reduced_train_set)
 predict_glm<-predict(train_glm,test_set)
 
 
@@ -357,7 +357,7 @@ Results
 
 ##        III.) K NEAREST NEIGHBOURS
 
-train_knn<-train(y~.,method="knn",data=final_train_set)
+train_knn<-train(y~.,method="knn",data=reduced_train_set)
 predict_knn<-predict(train_knn,test_set)
 
 Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
@@ -374,7 +374,7 @@ Results
 
 ##        IV.) DECISION TREES
 
-train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=final_train_set)
+train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=reduced_train_set)
 predict_rpart<-predict(train_rpart,test_set)
 
 Acc_rpart<-confusionMatrix(predict_rpart,test_set$y)$overall["Accuracy"]
