@@ -515,12 +515,21 @@ At this point, as expected, it is obvious that logistic regression is a better c
 
 ### 2.4.3 K NEAREST NEIGHBOURS
 
+Main idea behind k nearest neighbors, as in all machine learning algorithms, will be using the five features already selected  to estimate the conditional probability function:
 
+$$p(x_{1},x_{2},x_{3},x_{4},x_{5}) = Pr(Y=1 ∣ X_{1} =x_{1} , X_{2} =x_{2}, X_{3} =x_{3}, X_{4} =x_{4}, X_{5} =x_{5} )$$
+
+First it is defined the distance between all observations based on the features. Then, for any point $(x_{1},x_{2},x_{3},x_{4},x_{5})$ for which we want an estimate of $p(x_{1},x_{2},x_{3},x_{4},x_{5})$, we look for the k nearest points to it and then take an average of the 0s and 1s associated with these points. The set of points used to compute this average is called the neighborhood. Hence we are able to obtain $\hat{p}(x_{1},x_{2},x_{3},x_{4},x_{5})$. In order to control the flexibility of the estimation, the only hyperparameter to fine tune in this algorithm is *k*
+
+Previous steps can be done automatically in R using train function in caret package with knn method. Hyperparameter *k* is controlled with tuneGrid function and through trainControl function, cross validation can be controlled also.
+
+Hence, using 10-fold cross validation, fitting 10 versions of kNN to 9 bootstrapped samples, following results are obtained:
 
 
 ```{r k_nearest_neighbours, message=FALSE}
-
-train_knn<-train(y~.,method="knn",data=reduced_train_set)
+control <- trainControl(method = "cv", number = 10, p = .9)
+grid = data.frame(k = seq(9, 72, 9))
+train_knn<-train(y~.,method="knn",data=reduced_train_set,tuneGrid = grid,trControl = control)
 predict_knn<-predict(train_knn,test_set)
 
 Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
@@ -535,7 +544,7 @@ Results
 
 ```
 
-
+Results trend observed in logistic regression model keeps also for K nearest neighbor model, thus worsening sensitivity and even worsening accuracy, but improving balanced accuracy and specificity.
 
 ### 2.4.4 DECISSION TREES
 

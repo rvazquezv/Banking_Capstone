@@ -357,7 +357,9 @@ Results
 
 ##        III.) K NEAREST NEIGHBOURS
 
-train_knn<-train(y~.,method="knn",data=reduced_train_set)
+control <- trainControl(method = "cv", number = 10, p = .9)
+grid = data.frame(k = seq(9, 72, 9))
+train_knn<-train(y~.,method="knn",data=reduced_train_set,tuneGrid = grid,trControl = control)
 predict_knn<-predict(train_knn,test_set)
 
 Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
@@ -369,6 +371,7 @@ Spe_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Specificity"]
 Results<-rbind(Results,tibble(method = "K Nearest Neighbors", Accuracy = Acc_knn, Balanced_Accuracy = Bacc_knn,
                               Sensitivity = Sen_knn, Specificity = Spe_knn))
 Results
+
 
 
 
