@@ -433,9 +433,9 @@ As previously stated the final objective is building a classification system to 
 
 Nowadays there are several well-known supervised learning classification algorithms such as logistic regression, k nearest neighbors, decision trees, random forest, support vector machines or neuronal networks, having all of them different pros and cons.
 
-On their paper "A data-driven approach to predict the success of bank telemarketing"  [Moro et al., 2014] they compared logistic regression, decision trees, support vector machines and neuronal networks finding that NN performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
+On their paper *"A data-driven approach to predict the success of bank telemarketing"*  [Moro et al., 2014] they compared logistic regression, decision trees, support vector machines and neuronal networks finding that NN performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
 
-Besides, following approach taken in previous project "ML_RVV_Capstone_Project" I have also included a baseline predictor to set as reference.
+Besides, following approach taken in previous project *"ML_RVV_Capstone_Project"* I have also included a baseline predictor to set as reference.
 
 Finally, some decisions regarding primary metrics used to choose candidates models will also be necessary and discussed later.
 
@@ -475,7 +475,7 @@ Results <- tibble(method = "Naive", Accuracy = Acc, Balanced_Accuracy = Bacc, Se
 Results
 
 ```
-
+As observed in table above accuracy and sensitivity are reasonably good but balanced accuracy and specificity are not good at all as it can be expected due to non uniform distribution in our datasets. 
 
 ### 2.4.2 LOGISTIC REGRESSION
 
@@ -485,7 +485,7 @@ The logistic regression can be understood simply as finding the $\beta\beta$  pa
 $$ \hat{Y}={\begin{cases}1&\beta _{0}+\beta _{1}x+\varepsilon >0\\0&{\text{else}}\end{cases}}$$
 
 
-Applied to our data using train function in caret package with glm method, following results are obtained
+Applied to our data using train function in caret package with glm method, following results are obtained:
 
 
 
@@ -508,7 +508,33 @@ Results
 
 ```
 
+Despite not improving to much the accuracy and worsening the sensitivity, as expected, specificity, without being good enough yet, has improved dramatically and  balanced accuracy also improved `r format((Bacc_glm-Bacc)/Bacc,big.mark=",",scientific=F)` % 
+
+At this point, as expected, it is obvious that logistic regression is a better choice than naive one
+
+
 ### 2.4.3 K NEAREST NEIGHBOURS
+
+
+
+
+```{r k_nearest_neighbours, message=FALSE}
+
+train_knn<-train(y~.,method="knn",data=reduced_train_set)
+predict_knn<-predict(train_knn,test_set)
+
+Acc_knn<-confusionMatrix(predict_knn,test_set$y)$overall["Accuracy"]
+Bacc_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Balanced Accuracy"]
+Sen_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Sensitivity"]
+Spe_knn<-confusionMatrix(predict_knn,test_set$y)$byClass["Specificity"]
+
+## Save results to table
+Results<-rbind(Results,tibble(method = "K Nearest Neighbors", Accuracy = Acc_knn, Balanced_Accuracy = Bacc_knn,
+                              Sensitivity = Sen_knn, Specificity = Spe_knn))
+Results
+
+```
+
 
 
 ### 2.4.4 DECISSION TREES
