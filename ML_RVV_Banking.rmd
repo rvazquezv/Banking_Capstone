@@ -551,9 +551,9 @@ Results trend observed in logistic regression model keeps also for K nearest nei
 
 A decision tree is a flowchart-like structure in which each internal node represents a "test" on an attribute, each branch represents the outcome of the test, and each leaf node represents a class label (decision taken after computing all attributes). The paths from root to leaf represent classification rules.
 
-Hence decision trees clasifiers can be described as the combination of mathematical and computational techniques to aid the description, categorization and generalization of a given set of data.
+Hence decision trees clasifiers can be described as the combination of mathematical and computational techniques to categorize a given set of data.
 
-In our case data appears as rows in following form:
+In our case data appears as follows:
 
 $$(x_{1},x_{2},x_{3},x_{4},x_{5},Y)$$
 where Y is the dependent variable and features $(x_{1},x_{2},x_{3},x_{4},x_{5})$ already mentioned in previous models the ones to be partitioned to classify the dependent variable.
@@ -579,7 +579,7 @@ Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rpart, B
 Results
 
 ```
-As observed once more time
+As observed once more time balanced accuracy and specificity improves, but this time neither sensitivity nor accuracy worsen, so this is our first model overperforming remaining ones.
 
 \newpage
 
