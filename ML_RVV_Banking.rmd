@@ -546,9 +546,40 @@ Results
 
 Results trend observed in logistic regression model keeps also for K nearest neighbor model, thus worsening sensitivity and even worsening accuracy, but improving balanced accuracy and specificity.
 
-### 2.4.4 DECISSION TREES
+### 2.4.4 DECISION TREES
 
 
+A decision tree is a flowchart-like structure in which each internal node represents a "test" on an attribute, each branch represents the outcome of the test, and each leaf node represents a class label (decision taken after computing all attributes). The paths from root to leaf represent classification rules.
+
+Hence decision trees clasifiers can be described as the combination of mathematical and computational techniques to aid the description, categorization and generalization of a given set of data.
+
+In our case data appears as rows in following form:
+
+$$(x_{1},x_{2},x_{3},x_{4},x_{5},Y)$$
+where Y is the dependent variable and features $(x_{1},x_{2},x_{3},x_{4},x_{5})$ already mentioned in previous models the ones to be partitioned to classify the dependent variable.
+
+Due to their intelligibility and simplicity, decision trees are among the most popular machine learning algorithms.
+
+In R, decision trees can be managed via rpart included in rpart package, being complexity parameter (cp), minsplit and minbucket the hyperparameters to fine tune.
+
+In this case I have tested 25 values ranging from 0 to 0,05 for compexity parameter value and left default minsplit value (at least 20) and default minbucket value (round(minsplit/3)) obtaining following results:
+
+```{r decision_trees, message=FALSE}
+train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=reduced_train_set)
+predict_rpart<-predict(train_rpart,test_set)
+
+Acc_rpart<-confusionMatrix(predict_rpart,test_set$y)$overall["Accuracy"]
+Bacc_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Balanced Accuracy"]
+Sen_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Sensitivity"]
+Spe_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Specificity"]
+
+## Save results to table
+Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
+                              Sensitivity = Sen_rpart, Specificity = Spe_rpart))
+Results
+
+```
+As observed once more time
 
 \newpage
 
