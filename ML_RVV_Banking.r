@@ -400,9 +400,15 @@ train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=train_set)$re
 train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=train_set)
 y_hat_rf<-predict(train_rf,test_set)
 
-confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
+Acc_rf<-confusionMatrix(predict_rf,test_set$y)$overall["Accuracy"]
+Bacc_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Balanced Accuracy"]
+Sen_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Sensitivity"]
+Spe_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Specificity"]
 
-
+## Save results to table
+Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
+                              Sensitivity = Sen_rf, Specificity = Spe_rf))
+Results
 
 
 

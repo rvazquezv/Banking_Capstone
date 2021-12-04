@@ -581,6 +581,39 @@ Results
 ```
 As observed once more time balanced accuracy and specificity improves, but this time neither sensitivity nor accuracy worsen, so this is our first model overperforming remaining ones.
 
+
+### 2.4.5 RANDOM FOREST
+
+Finally, let's try random forest. Random forest are ensemble of trees. The idea is selecting many predictors, by choosing  different decision trees randomly picked over different features each time, and afterwards ensembling those predictors to build the final one. In our case for every observation in the test set, form a prediction $ \hat{Y_{j}}=$ using a different tree $T_{j}=$ with $j \epsilon (1,B) $ each one of the random trees and finally taking most frequent class among  $ \hat{Y_{1}}, ..., \hat{Y_{B}}$
+
+
+```{r random_forest, message=FALSE}
+nodesize<-seq(11,31,10)
+acc<-sapply(nodesize,function(ns){
+train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=train_set)$results$Kappa
+})
+
+train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=train_set)
+y_hat_rf<-predict(train_rf,test_set)
+
+Acc_rf<-confusionMatrix(predict_rf,test_set$y)$overall["Accuracy"]
+Bacc_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Balanced Accuracy"]
+Sen_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Sensitivity"]
+Spe_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Specificity"]
+
+## Save results to table
+Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
+                              Sensitivity = Sen_rf, Specificity = Spe_rf))
+Results
+
+
+
+```
+
+
+ 
+
+
 \newpage
 
 # 3.Results
