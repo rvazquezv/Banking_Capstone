@@ -452,6 +452,9 @@ $$\hat{Y}=0$$
 
 being $\hat{Y}$ the predicted result, with 0 as no suscription and 1 as suscription.
 
+As already mentioned earlier, `r format(100*mean(train_set$y=="no"),big.mark=",")`% of answers are no in train set which explains why naive model has `r format(Acc,big.mark=",")` accuracy. Hence prevalency is an issue within our original dataset and accuracy is not the best metric to consider. In order to mitigate prevalence as much as possible  I will also explore balance accuracy, sensitivity and specificity for all candidate models.
+
+
 In doing so following results are obtained:
 
 ```{r Baseline , message=FALSE}
@@ -462,14 +465,6 @@ Acc<-confusionMatrix(predict_baseline,test_set$y)$overall["Accuracy"]
 Bacc<-confusionMatrix(predict_baseline,test_set$y)$byClass["Balanced Accuracy"]
 Sen<-confusionMatrix(predict_baseline,test_set$y)$byClass["Sensitivity"]
 Spe<-confusionMatrix(predict_baseline,test_set$y)$byClass["Specificity"]
-
-```
-
-As already mentioned earlier, `r format(100*mean(train_set$y=="no"),big.mark=",")`% of answers are no in train set which explains why naive model has `r format(Acc,big.mark=",")` accuracy. Hence prevalency is an issue within our original dataset and accuracy is not the best metric to consider. In order to mitigate prevalence as much as possible  I will also explore balance accuracy, sensitivity and specificity for all candidate models.
-
-
-```{r Baseline_2, message=FALSE}
-
 ## Save results to table
 Results <- tibble(method = "Naive", Accuracy = Acc, Balanced_Accuracy = Bacc, Sensitivity = Sen, Specificity = Spe)
 Results
@@ -480,7 +475,7 @@ As observed in table above accuracy and sensitivity are reasonably good but bala
 ### 2.4.2 LOGISTIC REGRESSION
 
 Logistic regression  is a specific case of a set of generalized linear models (glm) and it extends the regression approach to categorical data. It measures the relationship between the categorical dependent variable and one or more independent variables by estimating probabilities using a logistic function.
-The logistic regression can be understood simply as finding the $\beta\beta$  parameters that best fit:
+The logistic regression can be understood simply as finding the $\beta$  parameters that best fit:
 
 $$ \hat{Y}={\begin{cases}1&\beta _{0}+\beta _{1}x+\varepsilon >0\\0&{\text{else}}\end{cases}}$$
 
@@ -510,7 +505,7 @@ Results
 
 Despite not improving to much the accuracy and worsening the sensitivity, as expected, specificity, without being good enough yet, has improved dramatically and  balanced accuracy also improved `r format((Bacc_glm-Bacc)/Bacc,big.mark=",",scientific=F)` % 
 
-At this point, as expected, it is obvious that logistic regression is a better choice than naive one
+At this point, as expected, it is obvious that logistic regression is a better choice than naive one.
 
 
 ### 2.4.3 K NEAREST NEIGHBOURS
@@ -544,7 +539,7 @@ Results
 
 ```
 
-Results trend observed in logistic regression model keeps also for K nearest neighbor model, thus worsening sensitivity and even worsening accuracy, but improving balanced accuracy and specificity.
+Results trend observed in logistic regression model keeps also for K nearest neighbor model, thus worsening sensitivity, but improving  accuracy, balanced accuracy and specificity.
 
 ### 2.4.4 DECISION TREES
 
@@ -558,11 +553,11 @@ In our case data appears as follows:
 $$(x_{1},x_{2},x_{3},x_{4},x_{5},Y)$$
 where Y is the dependent variable and features $(x_{1},x_{2},x_{3},x_{4},x_{5})$ already mentioned in previous models the ones to be partitioned to classify the dependent variable.
 
-Due to their intelligibility and simplicity, decision trees are among the most popular machine learning algorithms.
+Due to their simplicity, and the fact of showing powerful insights via visual inspection, decision trees are among the most popular machine learning algorithms.
 
-In R, decision trees can be managed via rpart included in rpart package, being complexity parameter (cp), minsplit and minbucket the hyperparameters to fine tune.
+In R, decision trees can be managed via rpart function, included in rpart package, being complexity parameter (cp), minsplit and minbucket the hyperparameters to fine tune.
 
-In this case I have tested 25 values ranging from 0 to 0,05 for compexity parameter value and left default minsplit value (at least 20) and default minbucket value (round(minsplit/3)) obtaining following results:
+In this case I have tested 25 values ranging from 0 to 0,05 for compexity parameter value and left default minsplit value (at least 20) and default minbucket value obtaining following results:
 
 ```{r decision_trees, message=FALSE}
 train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=reduced_train_set)
@@ -574,7 +569,7 @@ Sen_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Sensitivity"]
 Spe_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Specificity"]
 
 ## Save results to table
-Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
+Results<-rbind(Results,tibble(method = "Random Forest", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
                               Sensitivity = Sen_rpart, Specificity = Spe_rpart))
 Results
 
@@ -584,8 +579,12 @@ As observed once more time balanced accuracy and specificity improves, but this 
 
 ### 2.4.5 RANDOM FOREST
 
-Finally, let's try random forest. Random forest are ensemble of trees. The idea is selecting many predictors, by choosing  different decision trees randomly picked over different features each time, and afterwards ensembling those predictors to build the final one. In our case for every observation in the test set, form a prediction $ \hat{Y_{j}}=$ using a different tree $T_{j}=$ with $j \epsilon (1,B) $ each one of the random trees and finally taking most frequent class among  $ \hat{Y_{1}}, ..., \hat{Y_{B}}$
+Finally, let's try random forest. Random forest are ensemble of trees. The idea is selecting many predictors, by choosing  different decision trees randomly picked over different features each time, and afterwards ensembling those predictors to build the final one. In our case for every observation in the test set, form a prediction $\hat{Y_{j}}$ using a different tree $T_{j}$ with j $\epsilon$ (1,B) each one of the random trees and finally taking most frequent class among  $\hat{T_{1}}$ , ..., $\hat{T_{B}}$
 
+Random forest in R can be handled in several ways, one of them, still on caret package with rf method.
+To control the number of variables randomly sampled as candidates at each split we can use mtry, to control the minimum size of terminal nodes we can use nodesize.
+
+I have chosen mtry value as 2 and looked for the best nodesize among 11,21 and 31 obtaining following results:
 
 ```{r random_forest, message=FALSE}
 nodesize<-seq(11,31,10)
@@ -610,7 +609,7 @@ Results
 
 ```
 
-
+Computational time took longer than decision trees and hyperparameters are not perfectly fine tuned as it can be observed from results above since all metrics but sensitivity have worsen.
  
 
 
@@ -618,6 +617,9 @@ Results
 
 # 3.Results
 
+After comparing results obtained by baseline model, logistic regression, k nearest neighbors, decision trees and  random forest decision trees are the most promising ones. Intuitively, I could expect better results from random forest but computational time taken did not help while optimizing hyperparameters.
+
+For this reason and 
 
 \newpage
 

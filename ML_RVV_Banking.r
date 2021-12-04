@@ -406,9 +406,19 @@ Sen_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Sensitivity"]
 Spe_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Specificity"]
 
 ## Save results to table
-Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
+Results<-rbind(Results,tibble(method = "Random Forest", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
                               Sensitivity = Sen_rf, Specificity = Spe_rf))
 Results
+
+
+
+
+
+###############################################################################
+##
+##        Results
+##      
+###############################################################################
 
 
 
