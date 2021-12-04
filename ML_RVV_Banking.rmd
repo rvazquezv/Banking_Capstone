@@ -590,11 +590,11 @@ Finally, let's try random forest. Random forest are ensemble of trees. The idea 
 ```{r random_forest, message=FALSE}
 nodesize<-seq(11,31,10)
 acc<-sapply(nodesize,function(ns){
-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=train_set)$results$Kappa
+train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=reduced_train_set)$results$Kappa
 })
 
-train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=train_set)
-y_hat_rf<-predict(train_rf,test_set)
+train_rf<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=reduced_train_set)
+predict_rf<-predict(train_rf,test_set)
 
 Acc_rf<-confusionMatrix(predict_rf,test_set$y)$overall["Accuracy"]
 Bacc_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Balanced Accuracy"]
