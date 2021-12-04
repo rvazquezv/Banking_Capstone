@@ -33,7 +33,7 @@ if(!require(fastDummies)) install.packages("fastDummies", repos = "http://cran.u
 if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org")
 if(!require(rpart)) install.packages("rpart", repos = "http://cran.us.r-project.org")
 if(!require(randomForest)) install.packages("randomForest", repos = "http://cran.us.r-project.org")
-
+if(!require(rattle)) install.packages("rattle", repos = "http://cran.us.r-project.org")
 
 
 library(tidyverse)
@@ -46,6 +46,7 @@ library(fastDummies)
 library(e1071)
 library(rpart)
 library(randomForest)
+library(rattle)
 
 
 ###############################################################################
@@ -64,14 +65,6 @@ substrRight <- function(x, n){
 substrLeft <- function(x, n){
   substr(x, 1, n)
 }
-
-
-
-## Standarize function to standarize values on a numeric vector
-Standarize <- function(x){
-  (x-mean(x))/sd(x)
-}
-
 
 
 
@@ -420,57 +413,32 @@ Results
 ##      
 ###############################################################################
 
+## Plotting final model
+
+fancyRpartPlot(train_rpart$finalModel,main="Final model",yesno=2,split.col="black",nn.col="black", 
+               caption="Figure 24",palette="Set2",branch.col="black",type=2) 
+
+
+## Applying final model to Validation dataset
+
+final_predict_rpart<-predict(train_rpart,Validation)
+
+Acc_final<-confusionMatrix(final_predict_rpart,Validation$y)$overall["Accuracy"]
+Bacc_final<-confusionMatrix(final_predict_rpart,Validation$y)$byClass["Balanced Accuracy"]
+Sen_final<-confusionMatrix(final_predict_rpart,Validation$y)$byClass["Sensitivity"]
+Spe_final<-confusionMatrix(final_predict_rpart,Validation$y)$byClass["Specificity"]
+
+
+## Save results to final table
+Final_Results <- tibble(method = "Decision Trees", Accuracy = Acc_final, Balanced_Accuracy = Bacc_final, 
+                        Sensitivity = Sen_final, Specificity = Spe_final)
+Final_Results
 
 
 
 
 
-z<-train_set%>%select(duration,pdays,euribor3m,nr.employed,poutcome,y)
 
-z_test<-test_set%>%select(duration,pdays,euribor3m,nr.employed,poutcome,y)
-
-
-
-
-
-##        II.) LOGISTIC REGRESSION
-
-z_glm<-train(y~.,method="glm",data=z)
-predict_glm_z<-predict(z_glm,z_test)
-
-confusionMatrix(predict_glm_z,test_set$y)$overall["Accuracy"]
-
-
-##        III.) K NEAREST NEIGHBOURS
-
-z_knn<-train(y~.,method="knn",data=z)
-predict_knn_z<-predict(z_knn,z_test)
-
-confusionMatrix(predict_knn_z,test_set$y)$overall["Accuracy"]
-
-
-
-##        IV.) DECISSION TREES
-
-train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=z)
-y_hat_rpart<-predict(train_rpart,z_test)
-
-confusionMatrix(y_hat_rpart,test_set$y)$overall["Accuracy"]
-
-
-
-
-##        V.) RANDOM FOREST
-
-nodesize<-seq(1,51,10)
-acc<-sapply(nodesize,function(ns){
-  train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=ns,data=z)$results$Kappa
-})
-
-train_rf_z<-train(y~.,method="rf",tuneGrid=data.frame(mtry=2),nodesize=nodesize[which.max(acc)],data=z)
-y_hat_rf_z<-predict(train_rf_z,test_set)
-
-confusionMatrix(y_hat_rf,test_set$y)$overall["Accuracy"]
 
 
 
