@@ -20,8 +20,7 @@ knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
 
 # 1.Introduction
 
-According to \[\@Wikipedia.Marketing\]:
-
+According to [Wikipedia:](https://en.wikipedia.org/wiki/Marketing)
  
 
     1. Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
@@ -418,7 +417,7 @@ As previously stated the final objective is building a classification system to 
 
 Nowadays there are several well-known supervised learning classification algorithms such as logistic regression, k nearest neighbors, decision trees, random forest, support vector machines or neuronal networks, having all of them different pros and cons.
 
-On their paper *"A data-driven approach to predict the success of bank telemarketing"*  [Moro et al., 2014] they compared logistic regression, decision trees, support vector machines and neuronal networks finding that NN performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
+On their paper [@Moro], they compared logistic regression, decision trees, support vector machines and neuronal networks finding that neuronal networks performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
 
 Besides, following approach taken in previous project [ML_RVV_Capstone_Project](https://github.com/rvazquezv/Capstone) I have also included a baseline predictor to set as reference.
 
@@ -642,6 +641,9 @@ Final_Results
 
 # 4.Conclusions
 
+Binary classification is a frequent problem faced in many disciplines among science and real life. Supervised learning whenever enough historical data is collected offers a wide range of different algorithms to help us dealing with the problem and take better decisions.
+
+I have tested 
 
 \newpage
 
