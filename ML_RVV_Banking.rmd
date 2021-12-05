@@ -2,31 +2,27 @@
 title: "ML algorithm for Harvardx Capstone Course, Choose Your Own project"
 author: "Rubén Vázquez del Valle"
 date: "4/12/2021"
+bibliography: bibliography.bib
+biblio-style: apalike
+link-citations: TRUE
 output:
-  html_document:
+  pdf_document:
     df_print: kable
     fig_caption: true
     toc: true
     latex_engine: xelatex
     citation_package: natbib
-bibliography: bibliography.bib
-biblio-style: apalike
-link-citations: TRUE
 ---
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
 ```
 
-
-
 # 1.Introduction
 
+According to \[\@Wikipedia.Marketing\]:
 
-According to wikipedia:
-
+ 
 
     1. Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
     2. Direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
