@@ -6,7 +6,7 @@ bibliography: bibliography.bib
 biblio-style: apalike
 link-citations: TRUE
 output:
-  pdf_document:
+  html_document:
     df_print: kable
     fig_caption: true
     toc: true
@@ -37,11 +37,10 @@ One not so long old-fashioned direct marketing technique was phone calls.
 
 The purpose of this project is analyzing if such technique applied in this case by a Portuguese banking institution not so much time ago, had positive effect or not in its clients, or in other words building a classification system to predict if the client would subscribe a term deposit.
 
-The origin dataset has been downloaded from The UCI Machine Learning Repository: 
-https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
+The origin dataset has been downloaded from [The UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/machine-learning-databases/00222/)
 
 
-Once dataset was created, I have based my work on *"HarvardX - PH125.8x course: Data Science - Machine Learning"* specifically on machine learning techniques applied to supervised learning.
+Once dataset was created, I have based my work on [@rafalab] *"HarvardX - PH125.8x course: Data Science - Machine Learning"* specifically on machine learning techniques applied to supervised learning.
 
 
 
@@ -421,7 +420,7 @@ Nowadays there are several well-known supervised learning classification algorit
 
 On their paper *"A data-driven approach to predict the success of bank telemarketing"*  [Moro et al., 2014] they compared logistic regression, decision trees, support vector machines and neuronal networks finding that NN performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
 
-Besides, following approach taken in previous project *"ML_RVV_Capstone_Project"* I have also included a baseline predictor to set as reference.
+Besides, following approach taken in previous project [ML_RVV_Capstone_Project](https://github.com/rvazquezv/Capstone) I have also included a baseline predictor to set as reference.
 
 Finally, some decisions regarding primary metrics used to choose candidates models will also be necessary and discussed later.
 
