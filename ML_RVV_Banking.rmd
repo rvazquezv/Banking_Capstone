@@ -202,9 +202,11 @@ Now that source data has been properly addressed, let's continue by exploring an
 
 ```{r Exploratory Analysis, message=FALSE}
 
-head(Input_file_1[1:10])
-head(Input_file_1[11:21])
+head(Input_file_1[1:8])
+head(Input_file_1[9:15])
+head(Input_file_1[16:21])
 summary(Input_file_1)
+
 
 
 #Build an index with all character columns in the dataset that will need to become factor
