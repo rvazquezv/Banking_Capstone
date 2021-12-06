@@ -5,8 +5,9 @@ date: "4/12/2021"
 bibliography: bibliography.bib
 biblio-style: apalike
 link-citations: TRUE
+urlcolor: blue
 output:
-  html_document:
+  pdf_document:
     df_print: kable
     fig_caption: true
     toc: true
