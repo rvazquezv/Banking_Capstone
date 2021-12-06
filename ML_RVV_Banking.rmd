@@ -187,7 +187,7 @@ Hence applying anti_join to  `r format(dw_files[3],big.mark=",")` on `r format(d
     10. day_of_week: Last contact day of the week.
     11. duration: Last contact duration, in seconds. 
     12. campaign: For each  client, number of contacts performed during this campaign. 
-    13. pdays: Number of days since last contact from a previous campaign (999 means client was not previously contacted).
+    13. pdays: Days since last contact from a previous campaign (999 means not previously contacted).
     14. previous: For each  client, number of contacts performed before this campaign.
     15. poutcome: Outcome of the previous marketing campaign if existing.
     16. emp.var.rate: Employment variation rate - quarterly indicator.
