@@ -338,6 +338,8 @@ for(i in (1:n)){
 Bivariate analysis is a simple case of multivariate analysis, instead of comparing variables in pairs, multiple variables are compared against each other at the same time. This may allow us to identify prediction power, which variables are providing same kind of information and finally allow us to choose if all variables make sense within the model or on the other hand some of them can de disregarded.
 
 In order to perform this multivariate analysis, let's analyze Pearson correlation between numeric variables and dependent variable "Y"
+
+
 ```{r Exp_Analysis 3, message=FALSE}
 Y<-as.numeric(train_set$y)
 M<-cbind(train_set[-idx_isc],Y)
@@ -419,7 +421,7 @@ Nowadays there are several well-known supervised learning classification algorit
 
 On their paper [@Moro], they compared logistic regression, decision trees, support vector machines and neuronal networks finding that neuronal networks performed better than others. In this project, due to computational resources needed for running support vector machines and neuronal networks, I have discarded them focusing only on logistic regression, k nearest neighbors, decision trees and  random forest.
 
-Besides, following approach taken in previous project [ML_RVV_Capstone_Project](https://github.com/rvazquezv/Capstone) I have also included a baseline predictor to set as reference.
+Besides, following approach taken in my previous project [ML_RVV_Capstone_Project](https://github.com/rvazquezv/Capstone) I have also included a baseline predictor to set as reference.
 
 Finally, some decisions regarding primary metrics used to choose candidates models will also be necessary and discussed later.
 
@@ -558,7 +560,7 @@ Sen_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Sensitivity"]
 Spe_rpart<-confusionMatrix(predict_rpart,test_set$y)$byClass["Specificity"]
 
 ## Save results to table
-Results<-rbind(Results,tibble(method = "Random Forest", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
+Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rpart, Balanced_Accuracy = Bacc_rpart,
                               Sensitivity = Sen_rpart, Specificity = Spe_rpart))
 Results
 
@@ -590,7 +592,7 @@ Sen_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Sensitivity"]
 Spe_rf<-confusionMatrix(predict_rf,test_set$y)$byClass["Specificity"]
 
 ## Save results to table
-Results<-rbind(Results,tibble(method = "Decision Trees", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
+Results<-rbind(Results,tibble(method = "Random Forest", Accuracy = Acc_rf, Balanced_Accuracy = Bacc_rf,
                               Sensitivity = Sen_rf, Specificity = Spe_rf))
 Results
 
@@ -641,9 +643,15 @@ Final_Results
 
 # 4.Conclusions
 
-Binary classification is a frequent problem faced in many disciplines among science and real life. Supervised learning whenever enough historical data is collected offers a wide range of different algorithms to help us dealing with the problem and take better decisions.
+Binary classification is a frequent problem faced in many disciplines among science and real life. Supervised learning whenever enough historical data is collected offers a wide range of different algorithms to help us dealing with these problems and take better decisions.
 
-I have tested 
+I have tested logistic regression, k nearest neighbors, decision trees and random forest for a binary classification within a non uniformly distributed dataset where prevalence is indeed a challenging issue.
+
+Despite the fact of prevalence, decision tree built allowed to obtain good accuracy and sensitivity and reasonable balanced accuracy and almost acceptable specificity. Apart from being significantly comprehensible, as shown in previous section, being able to classify in advance the results of your campaign allows the stakeholder to discriminate which sector of population focus on to get more revenues. 
+
+Nevertheless, some more optimization could have been addressed specially on random forest because results on random forest have been far from expected ones a priori. Some extra analysis could also have been performed, specially due to imbalance nature of source dataset. Hence, building several different new samples from original dataset with more percentage of cases of non dominant segment of population to see if specificity could improve more is a possible future work. Understand the behavior of ROC curves or Gini index could be another interesting idea to progress with.
+
+Finnaly, testing support vector machines and neuronal networks and comparing them with these results to confirm [@Moro] analysis are also another future possible ideas for future work.
 
 \newpage
 
