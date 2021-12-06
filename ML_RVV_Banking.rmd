@@ -19,6 +19,8 @@ output:
 knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
 ```
 
+\newpage  
+
 # 1.Introduction
 
 According to [Wikipedia:](https://en.wikipedia.org/wiki/Marketing)
@@ -271,6 +273,8 @@ summary(bankraw)
 
 
 ```
+
+It is remarkable that at simple visual inspection this split of original dataset does not differ much from the original one.
 
 Finally, now that bankraw and validation datasets were created, I split bankraw in train_set and test_set applying once again Pareto's law, and I will use theses train_set and test_set to train different models and test their performance over different metrics prior to decide which candidate model will be the final one. Once final model is chosen, and only at that point, validation dataset will be used. 
 
@@ -551,7 +555,7 @@ Due to their simplicity, and the fact of showing powerful insights via visual in
 
 In R, decision trees can be managed via rpart function, included in rpart package, being complexity parameter (cp), minsplit and minbucket the hyperparameters to fine tune.
 
-In this case I have tested 25 values ranging from 0 to 0,05 for compexity parameter value and left default minsplit value (at least 20) and default minbucket value obtaining following results:
+In this case I have tested 25 values ranging from 0 to 0,05 for complexity parameter value and left default minsplit value (at least 20) and default minbucket value obtaining following results:
 
 ```{r decision_trees, message=FALSE}
 train_rpart<-train(y~.,method="rpart",tuneGrid=data.frame(cp=seq(0,0.05,len=25)),data=reduced_train_set)
