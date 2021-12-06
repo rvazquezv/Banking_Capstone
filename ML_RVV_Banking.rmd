@@ -23,8 +23,8 @@ knitr::opts_chunk$set(echo = FALSE,warning = FALSE)
 According to [Wikipedia:](https://en.wikipedia.org/wiki/Marketing)
  
 
-    1. Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
-    2. Direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
+> 1.  Marketing is currently defined by the American Marketing Association (AMA) as " the performance of business activities that direct the flow of goods, and services from producers to consumers"
+> 2.  Direct marketing is a form of communicating an offer, where organizations communicate directly to a pre-selected customer and supply a method for a direct response.
 
 
 
